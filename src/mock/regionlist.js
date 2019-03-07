@@ -1,0 +1,505 @@
+/* eslint-disable */
+const regionlist = [{
+	'regionId': 1,
+	'regionCode': '520000000000',
+	'regionName': '贵州省水利厅',
+	'parentId': null
+}, {
+	'regionId': 2,
+	'regionCode': '520100000000',
+	'regionName': '贵阳市',
+	'parentId': 1
+}, {
+	'regionId': 3,
+	'regionCode': '520200000000',
+	'regionName': '六盘水市',
+	'parentId': 1
+}, {
+	'regionId': 4,
+	'regionCode': '520300000000',
+	'regionName': '遵义市',
+	'parentId': 1
+}, {
+	'regionId': 5,
+	'regionCode': '520400000000',
+	'regionName': '安顺市',
+	'parentId': 1
+}, {
+	'regionId': 6,
+	'regionCode': '520500000000',
+	'regionName': '毕节市',
+	'parentId': 1
+}, {
+	'regionId': 7,
+	'regionCode': '520600000000',
+	'regionName': '铜仁市',
+	'parentId': 1
+}, {
+	'regionId': 8,
+	'regionCode': '522300000000',
+	'regionName': '黔西南布依族苗族自治州',
+	'parentId': 1
+}, {
+	'regionId': 9,
+	'regionCode': '522600000000',
+	'regionName': '黔东南苗族侗族自治州',
+	'parentId': 1
+}, {
+	'regionId': 10,
+	'regionCode': '522700000000',
+	'regionName': '黔南布依族苗族自治州',
+	'parentId': 1
+}, {
+	'regionId': 11,
+	'regionCode': '520102000000',
+	'regionName': '南明区',
+	'parentId': 2
+}, {
+	'regionId': 12,
+	'regionCode': '520103000000',
+	'regionName': '云岩区',
+	'parentId': 2
+}, {
+	'regionId': 13,
+	'regionCode': '520111000000',
+	'regionName': '花溪区',
+	'parentId': 2
+}, {
+	'regionId': 14,
+	'regionCode': '520112000000',
+	'regionName': '乌当区',
+	'parentId': 2
+}, {
+	'regionId': 15,
+	'regionCode': '520113000000',
+	'regionName': '白云区',
+	'parentId': 2
+}, {
+	'regionId': 16,
+	'regionCode': '520115000000',
+	'regionName': '观山湖区',
+	'parentId': 2
+}, {
+	'regionId': 17,
+	'regionCode': '520121000000',
+	'regionName': '开阳县',
+	'parentId': 2
+}, {
+	'regionId': 18,
+	'regionCode': '520122000000',
+	'regionName': '息烽县',
+	'parentId': 2
+}, {
+	'regionId': 19,
+	'regionCode': '520123000000',
+	'regionName': '修文县',
+	'parentId': 2
+}, {
+	'regionId': 20,
+	'regionCode': '520181000000',
+	'regionName': '清镇市',
+	'parentId': 2
+}, {
+	'regionId': 21,
+	'regionCode': '520201000000',
+	'regionName': '钟山区',
+	'parentId': 3
+}, {
+	'regionId': 22,
+	'regionCode': '520203000000',
+	'regionName': '六枝特区',
+	'parentId': 3
+}, {
+	'regionId': 23,
+	'regionCode': '520221000000',
+	'regionName': '水城县',
+	'parentId': 3
+}, {
+	'regionId': 24,
+	'regionCode': '520222000000',
+	'regionName': '盘县',
+	'parentId': 3
+}, {
+	'regionId': 25,
+	'regionCode': '520302000000',
+	'regionName': '红花岗区',
+	'parentId': 4
+}, {
+	'regionId': 26,
+	'regionCode': '520303000000',
+	'regionName': '汇川区',
+	'parentId': 4
+}, {
+	'regionId': 27,
+	'regionCode': '520321000000',
+	'regionName': '播州区',
+	'parentId': 4
+}, {
+	'regionId': 28,
+	'regionCode': '520381000000',
+	'regionName': '赤水市',
+	'parentId': 4
+}, {
+	'regionId': 29,
+	'regionCode': '520382000000',
+	'regionName': '仁怀市',
+	'parentId': 4
+}, {
+	'regionId': 30,
+	'regionCode': '520322000000',
+	'regionName': '桐梓县',
+	'parentId': 4
+}, {
+	'regionId': 31,
+	'regionCode': '520323000000',
+	'regionName': '绥阳县',
+	'parentId': 4
+}, {
+	'regionId': 32,
+	'regionCode': '520324000000',
+	'regionName': '正安县',
+	'parentId': 4
+}, {
+	'regionId': 33,
+	'regionCode': '520325000000',
+	'regionName': '道真仡佬族苗族自治县',
+	'parentId': 4
+}, {
+	'regionId': 34,
+	'regionCode': '520326000000',
+	'regionName': '务川仡佬族苗族自治县',
+	'parentId': 4
+}, {
+	'regionId': 35,
+	'regionCode': '520327000000',
+	'regionName': '凤冈县',
+	'parentId': 4
+}, {
+	'regionId': 36,
+	'regionCode': '520328000000',
+	'regionName': '湄潭县',
+	'parentId': 4
+}, {
+	'regionId': 37,
+	'regionCode': '520329000000',
+	'regionName': '余庆县',
+	'parentId': 4
+}, {
+	'regionId': 38,
+	'regionCode': '520330000000',
+	'regionName': '习水县',
+	'parentId': 4
+}, {
+	'regionId': 39,
+	'regionCode': '520402000000',
+	'regionName': '西秀区',
+	'parentId': 5
+}, {
+	'regionId': 40,
+	'regionCode': '520403000000',
+	'regionName': '平坝区',
+	'parentId': 5
+}, {
+	'regionId': 41,
+	'regionCode': '520422000000',
+	'regionName': '普定县',
+	'parentId': 5
+}, {
+	'regionId': 42,
+	'regionCode': '520423000000',
+	'regionName': '镇宁布依族苗族自治县',
+	'parentId': 5
+}, {
+	'regionId': 43,
+	'regionCode': '520424000000',
+	'regionName': '关岭布依族苗族自治县',
+	'parentId': 5
+}, {
+	'regionId': 44,
+	'regionCode': '520425000000',
+	'regionName': '紫云苗族布依族自治县',
+	'parentId': 5
+}, {
+	'regionId': 45,
+	'regionCode': '520502000000',
+	'regionName': '七星关区',
+	'parentId': 6
+}, {
+	'regionId': 46,
+	'regionCode': '520521000000',
+	'regionName': '大方县',
+	'parentId': 6
+}, {
+	'regionId': 47,
+	'regionCode': '520522000000',
+	'regionName': '黔西县',
+	'parentId': 6
+}, {
+	'regionId': 48,
+	'regionCode': '520523000000',
+	'regionName': '金沙县',
+	'parentId': 6
+}, {
+	'regionId': 49,
+	'regionCode': '520524000000',
+	'regionName': '织金县',
+	'parentId': 6
+}, {
+	'regionId': 50,
+	'regionCode': '520525000000',
+	'regionName': '纳雍县',
+	'parentId': 6
+}, {
+	'regionId': 51,
+	'regionCode': '520526000000',
+	'regionName': '威宁彝族回族苗族自治县',
+	'parentId': 6
+}, {
+	'regionId': 52,
+	'regionCode': '520527000000',
+	'regionName': '赫章县',
+	'parentId': 6
+}, {
+	'regionId': 53,
+	'regionCode': '520602000000',
+	'regionName': '碧江区',
+	'parentId': 7
+}, {
+	'regionId': 54,
+	'regionCode': '520603000000',
+	'regionName': '万山区',
+	'parentId': 7
+}, {
+	'regionId': 55,
+	'regionCode': '520621000000',
+	'regionName': '江口县',
+	'parentId': 7
+}, {
+	'regionId': 56,
+	'regionCode': '520622000000',
+	'regionName': '玉屏侗族自治县',
+	'parentId': 7
+}, {
+	'regionId': 57,
+	'regionCode': '520623000000',
+	'regionName': '石阡县',
+	'parentId': 7
+}, {
+	'regionId': 58,
+	'regionCode': '520624000000',
+	'regionName': '思南县',
+	'parentId': 7
+}, {
+	'regionId': 59,
+	'regionCode': '520625000000',
+	'regionName': '印江土家族苗族自治县',
+	'parentId': 7
+}, {
+	'regionId': 60,
+	'regionCode': '520626000000',
+	'regionName': '德江县',
+	'parentId': 7
+}, {
+	'regionId': 61,
+	'regionCode': '520627000000',
+	'regionName': '沿河土家族自治县',
+	'parentId': 7
+}, {
+	'regionId': 62,
+	'regionCode': '520628000000',
+	'regionName': '松桃苗族自治县',
+	'parentId': 7
+}, {
+	'regionId': 63,
+	'regionCode': '522301000000',
+	'regionName': '兴义市',
+	'parentId': 8
+}, {
+	'regionId': 64,
+	'regionCode': '522322000000',
+	'regionName': '兴仁县',
+	'parentId': 8
+}, {
+	'regionId': 65,
+	'regionCode': '522323000000',
+	'regionName': '普安县',
+	'parentId': 8
+}, {
+	'regionId': 66,
+	'regionCode': '522324000000',
+	'regionName': '晴隆县',
+	'parentId': 8
+}, {
+	'regionId': 67,
+	'regionCode': '522325000000',
+	'regionName': '贞丰县',
+	'parentId': 8
+}, {
+	'regionId': 68,
+	'regionCode': '522326000000',
+	'regionName': '望谟县',
+	'parentId': 8
+}, {
+	'regionId': 69,
+	'regionCode': '522327000000',
+	'regionName': '册亨县',
+	'parentId': 8
+}, {
+	'regionId': 70,
+	'regionCode': '522328000000',
+	'regionName': '安龙县',
+	'parentId': 8
+}, {
+	'regionId': 71,
+	'regionCode': '522601000000',
+	'regionName': '凯里市',
+	'parentId': 9
+}, {
+	'regionId': 72,
+	'regionCode': '522622000000',
+	'regionName': '黄平县',
+	'parentId': 9
+}, {
+	'regionId': 73,
+	'regionCode': '522623000000',
+	'regionName': '施秉县',
+	'parentId': 9
+}, {
+	'regionId': 74,
+	'regionCode': '522624000000',
+	'regionName': '三穗县',
+	'parentId': 9
+}, {
+	'regionId': 75,
+	'regionCode': '522625000000',
+	'regionName': '镇远县',
+	'parentId': 9
+}, {
+	'regionId': 76,
+	'regionCode': '522626000000',
+	'regionName': '岑巩县',
+	'parentId': 9
+}, {
+	'regionId': 77,
+	'regionCode': '522627000000',
+	'regionName': '天柱县',
+	'parentId': 9
+}, {
+	'regionId': 78,
+	'regionCode': '522628000000',
+	'regionName': '锦屏县',
+	'parentId': 9
+}, {
+	'regionId': 79,
+	'regionCode': '522629000000',
+	'regionName': '剑河县',
+	'parentId': 9
+}, {
+	'regionId': 80,
+	'regionCode': '522630000000',
+	'regionName': '台江县',
+	'parentId': 9
+}, {
+	'regionId': 81,
+	'regionCode': '522631000000',
+	'regionName': '黎平县',
+	'parentId': 9
+}, {
+	'regionId': 82,
+	'regionCode': '522632000000',
+	'regionName': '榕江县',
+	'parentId': 9
+}, {
+	'regionId': 83,
+	'regionCode': '522633000000',
+	'regionName': '从江县',
+	'parentId': 9
+}, {
+	'regionId': 84,
+	'regionCode': '522634000000',
+	'regionName': '雷山县',
+	'parentId': 9
+}, {
+	'regionId': 85,
+	'regionCode': '522635000000',
+	'regionName': '麻江县',
+	'parentId': 9
+}, {
+	'regionId': 86,
+	'regionCode': '522636000000',
+	'regionName': '丹寨县',
+	'parentId': 9
+}, {
+	'regionId': 87,
+	'regionCode': '522701000000',
+	'regionName': '都匀市',
+	'parentId': 10
+}, {
+	'regionId': 88,
+	'regionCode': '522702000000',
+	'regionName': '福泉市',
+	'parentId': 10
+}, {
+	'regionId': 89,
+	'regionCode': '522722000000',
+	'regionName': '荔波县',
+	'parentId': 10
+}, {
+	'regionId': 90,
+	'regionCode': '522723000000',
+	'regionName': '贵定县',
+	'parentId': 10
+}, {
+	'regionId': 91,
+	'regionCode': '522725000000',
+	'regionName': '瓮安县',
+	'parentId': 10
+}, {
+	'regionId': 92,
+	'regionCode': '522726000000',
+	'regionName': '独山县',
+	'parentId': 10
+}, {
+	'regionId': 93,
+	'regionCode': '522727000000',
+	'regionName': '平塘县',
+	'parentId': 10
+}, {
+	'regionId': 94,
+	'regionCode': '522728000000',
+	'regionName': '罗甸县',
+	'parentId': 10
+}, {
+	'regionId': 95,
+	'regionCode': '522729000000',
+	'regionName': '长顺县',
+	'parentId': 10
+}, {
+	'regionId': 96,
+	'regionCode': '522730000000',
+	'regionName': '龙里县',
+	'parentId': 10
+}, {
+	'regionId': 97,
+	'regionCode': '522731000000',
+	'regionName': '惠水县',
+	'parentId': 10
+}, {
+	'regionId': 98,
+	'regionCode': '522732000000',
+	'regionName': '三都水族自治县',
+	'parentId': 10
+}, {
+	'regionId': 99,
+	'regionCode': '52033000000',
+	'regionName': '新蒲新区',
+	'parentId': 4
+}, {
+	'regionId': 100,
+	'regionCode': '52022000000',
+	'regionName': '盘州市',
+	'parentId': 3
+}]
+
+export default regionlist
+/* eslint-disable */
