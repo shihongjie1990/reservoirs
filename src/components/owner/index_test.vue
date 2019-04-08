@@ -38,7 +38,10 @@
         <el-row :gutter="20"
                 class="notice-block">
           <div class="overview-notice">
-            <div class="notice-title">公告</div>
+            <div class="notice-title">
+              <span>公告</span>
+              <hr>
+            </div>
             <div class="notice-content"
                  v-if="noticeList.length > 0">
               <div v-for="item in noticeList"

@@ -1628,8 +1628,28 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   margin: 0 50px;
   padding-bottom: 22px;
   font-size: 18px;
-  border-bottom: 1px solid #e0e0e0;
+  /* border-bottom: 1px solid #e0e0e0; */
   text-align: center;
+  position: relative;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 10px;
+}
+
+.overview-notice>.notice-title>span {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  padding: 0 10px;
+}
+
+.overview-notice>.notice-title>hr {
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  z-index: 0;
+  border-color: #e0e0e0;
 }
 
 .overview-notice>div.notice-content>div {
