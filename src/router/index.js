@@ -48,6 +48,9 @@ import testChart from '@/components/engineerDepartment/statistics/test'
 // import video from '@/components/engineerDepartment/reservoir/reservoirItem/video'
 // import attachmentfiles from '@/components/owner/projectPrepare/prepareTask/attachmentFiles'
 
+import indexTest from '@/components/owner/index_test'
+import calendar from '@/components/widget/calendar'
+
 Vue.use(Router)
 
 /**
@@ -182,6 +185,23 @@ const currentRouter = new Router({
         component: overview
       }]
     },
+    // --------------------------------------------- 测试
+    {
+      path: '/',
+      name: '测试首页',
+      component: MainContent,
+      children: [{
+        path: '/indexTest',
+        name: '首页--父节点',
+        component: indexTest
+      }]
+    },
+    {
+      path: '/calendar',
+      name: '日历',
+      component: calendar
+    },
+    // ------------------------------------------------- 测试
     {
       path: '/',
       name: '公告展示--父节点',

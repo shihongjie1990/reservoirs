@@ -1,0 +1,30 @@
+.reservoir-desc {
+  background: #fff;
+  border-radius: 10px;
+  height: 757px;
+}
+
+.reservoir-desc>div {
+  padding: 10px 20px;
+}
+
+.reservoir-desc>.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.reservoir-desc>.desc-detail>div {
+  padding: 6px 0;
+}
+
+.desc-detail>div>label {
+  width: 70px;
+  display: inline-block;
+}
+
+.desc-detail>div>span {
+  display: inline-block;
+  width: calc(100% - 75px);
+  vertical-align: top;
+  word-break: break-word;
+}

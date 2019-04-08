@@ -1065,8 +1065,8 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 }
 
 .notice-block {
-  width: 350px;
-  float: right;
+  /* width: 350px;
+  float: right; */
 }
 
 /* -----主题内容左侧菜单收缩----- */
@@ -1524,7 +1524,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   background: none !important;
 }
 
-.owner-overview>.el-row:first-child>.el-col:first-child {
+.owner-overview .notice-block {
   text-align: center;
   padding: 30px 0;
   background: #fff;
@@ -1545,7 +1545,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   width: 23% !important; */
 }
 
-.reservoir-info>div:first-child {
+.reservoir-info>.reservoir-simple-detail {
   /* border: 1px solid #aaa; */
   border-left: none;
   border-radius: 16px;
@@ -1586,21 +1586,21 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   font-size: 12px;
 }
 
-.reservoir-info>div:last-child {
+.reservoir-info>.conveniency-access {
   margin-top: 10px;
   background: #fff;
   text-align: center;
   border-radius: 10px;
 }
 
-.reservoir-info>div:last-child>div {
+.reservoir-info>.conveniency-access>div {
   text-align: left;
   font-size: 16px;
   padding: 8px 15px;
   color: #aaa;
 }
 
-.reservoir-info>div:last-child>button {
+.reservoir-info>.conveniency-access>button {
   width: 90%;
   margin: 10px 0;
 }
@@ -1612,6 +1612,12 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 
 .owner-overview>.overview-operation>button:first-child {
   margin-left: 50px;
+}
+
+.reservoir-info>.conveniency-access>button>span {
+  font-size: 16px;
+  vertical-align: super;
+  margin-left: 10px;
 }
 
 .overview-notice {
@@ -1711,7 +1717,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 }
 
 .chart-row {
-  margin-top: 20px;
+  margin-top: 10px;
   background: #fff;
 }
 
