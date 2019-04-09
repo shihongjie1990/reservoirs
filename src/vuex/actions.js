@@ -52,3 +52,9 @@ export const setStep = ({
 }, step) => {
   commit('stepState', step)
 }
+
+export const setShowImg = ({
+  commit
+}, obj) => {
+  commit('SHOW_IMG_STATE', obj)
+}

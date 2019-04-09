@@ -1,13 +1,24 @@
 <template>
   <div id="app">
     <router-view />
+    <a class="view-full-pic"
+       @click="closeImgShow"
+       v-if="$store.state.SHOW_IMG.flag">
+      <img :src="$store.state.SHOW_IMG.url"
+           alt="">
+    </a>
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
-  components: {}
+  components: {},
+  methods: {
+    closeImgShow() {
+      this.$store.dispatch('setShowImg', { flag: false, url: '' })
+    }
+  }
 }
 </script>
 

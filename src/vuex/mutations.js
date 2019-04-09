@@ -44,3 +44,7 @@ export const expandMenuState = (state, expandMenu) => {
 export const stepState = (state, step) => {
   state.step = step
 }
+
+export const SHOW_IMG_STATE = (state, obj) => {
+  state.SHOW_IMG = obj
+}

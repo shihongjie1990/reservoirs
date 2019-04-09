@@ -9,6 +9,8 @@ import axios from 'axios'
 import VueCookies from 'vue-cookies'
 import store from './vuex/store'
 import 'babel-polyfill'
+// 自定义公用方法
+import common from './common/common'
 // import echarts from 'echarts'
 // import 'echarts-liquidfill'
 
@@ -90,11 +92,13 @@ axios.interceptors.response.use(res => {
     }
   }
   // return Promise.reject(err)
-  return err.response
+  return Promise.reject(err.response)
 })
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
+
+Vue.prototype.$common = common
 
 /* eslint-disable no-new */
 new Vue({

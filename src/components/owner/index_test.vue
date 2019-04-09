@@ -8,26 +8,46 @@
         <div class="reservoir-desc">
           <div class="title">冉渡滩水库</div>
           <div>
-            <img src="static/images/wallpaper.jpg"
+            <!-- <img src="static/images/wallpaper.jpg"
                  alt=""
-                 style="width:100%;">
+                 style="width:100%;"
+                 @click.stop.prevent="showFullImg('static/images/wallpaper.jpg')"> -->
+            <el-carousel trigger="click"
+                         height="200px">
+              <el-carousel-item v-for="(item, index) in imgs"
+                                :key="index">
+                <div class="slide-show">
+                  <img :src="item.url"
+                       alt=""
+                       @click.stop.prevent="showFullImg(item.url)">
+                </div>
+              </el-carousel-item>
+            </el-carousel>
           </div>
           <div class="desc-detail">
             <div>
               <label>法人：</label>
-              <span>XXX</span>
+              <span :title="reservoir.legalRepresentativeName">{{ reservoir.legalRepresentativeName }}</span>
+            </div>
+            <div>
+              <label>坝型：</label>
+              <span :title="reservoir.damType">{{ reservoir.damType }}</span>
             </div>
             <div>
               <label>规模：</label>
-              <span>中II型</span>
+              <span>{{ reservoir.scale || '（无）' }}</span>
             </div>
             <div>
               <label>项目状态：</label>
-              <span>在建</span>
+              <span>{{ reservoir.state || '（无）' }}</span>
             </div>
             <div>
-              <label>水库性质：</label>
-              <span>灌溉水资源但是骄傲烦恼沙发算积分东岸价格哦啊单机构的四季风共商大计佛山等级佛is阿金沟is阿基德狗ID撒结构sgo附件扫金佛山圣诞节哦啊国剧盛典奇偶发郭劲松阿萨德解耦股搜到积分</span>
+              <label>工程任务：</label>
+              <span>{{ reservoir.projectTask || '（无）' }}</span>
+            </div>
+            <div>
+              <label>水库概要：</label>
+              <span>{{ reservoir.overview || '（无）' }}</span>
             </div>
           </div>
         </div>
@@ -81,7 +101,8 @@
       <el-col :lg="6"
               :md="6"
               :xs="24">
-        <calendar @clickMonth="clickMonth"></calendar>
+        <calendar @clickMonth="clickMonth"
+                  :yearMonth="projectPaperDate"></calendar>
       </el-col>
       <el-col :lg="6"
               :md="6"
@@ -123,10 +144,24 @@ export default {
         pageNum: 1,
         pageSize: 10
       },
-      reservoir: ''
+      reservoir: '',
+      imgs: [{
+        url: 'static/images/wallpaper.jpg'
+      }, {
+        url: 'static/images/4.png'
+      }],
+      projectPaperDate: {}
     }
   },
   methods: {
+    // 全屏图片
+    showFullImg(url) {
+      let param = {
+        flag: true,
+        url: url
+      }
+      this.$store.dispatch('setShowImg', param)
+    },
     getAnnouncements(pagerOp) {
       let thisRequest = this.$http.post('/api/announcement/page', pagerOp)
       return thisRequest
@@ -304,13 +339,33 @@ export default {
       }
       rainEchart.setOption(option)
     },
-    adjustProjectInfo() {
-      let reservoir = this.reservoir
-      if (reservoir) {
-        this.$alert('基本资料已填报，请勿重复填报！', '提示', { type: 'info' })
-      } else {
-        this.$router.push('/projectprepare/add')
-      }
+    // 获取所有月报信息
+    getAllMonthPaper() {
+      this.$http.get('/api/pmr/perall').then(res => {
+        if (res.code === 1002) {
+          let papers = res.data
+          let year = []
+          let year_month = {}
+          papers.map(item => {
+            let date = new Date(item.submitDate.replace(/-/g, '/'))
+            let _year = date.getFullYear()
+            let index = year.indexOf(_year)
+            if (index > -1) {
+              year_month[_year].push(date.getMonth() + 1)
+            } else {
+              year.push(_year)
+              year_month[_year] = [date.getMonth() + 1]
+            }
+          })
+          this.projectPaperDate = year_month
+        } else {
+          this.$message.error(res.msg || res.content)
+        }
+      }, thisErr => {
+        this.projectPaperDate = {
+          '2018': [1, 2, 3, 4, 5, 6]
+        }
+      })
     },
     // 点击日历月份跳转到月报信息
     clickMonth(value) {
@@ -319,7 +374,33 @@ export default {
     }
   },
   mounted() {
-
+    // 获取月报信息
+    this.getAllMonthPaper()
+    // 获取localStorage中水库信息
+    let Base64 = require('js-base64').Base64
+    let reservoirCode = window.localStorage.RESERVOIR
+    // this.getMyBaseInfo()
+    // let baseInfoId = '8A808281-6458-AB31-0164-58AB4EF70143'
+    if (reservoirCode) {
+      let reservoirStr = Base64.decode(reservoirCode)
+      let reservoir = JSON.parse(reservoirStr)
+      let baseInfoId = reservoir.baseInfoId
+      this.getAllRainFallData(baseInfoId).then(res => {
+        let rainData = res.data
+        let thisRainData = this.rainSituationDataFun(rainData, 'tm', 'drp')
+        this.initRainChart(thisRainData, 'rain_fall', '降雨量', '雨量值(mm)')
+      })
+      this.getAllWaterLevelData(baseInfoId).then(res => {
+        let waterData = res.data
+        let thisWaterData = this.otherDataFun(waterData)
+        this.initRainChart(thisWaterData.waterHeightData, 'water_height', '水位', '水位(m)')
+        this.initRainChart(thisWaterData.waterFlowData, 'water_flow', '流量', '流量(m3/s)')
+      })
+    }
+    this.getAnnouncements(this.pagerOp).then(res => {
+      this.noticeList = res.data.list
+    })
+    this.getMyBaseInfo(Base64)
   }
 }
 </script>

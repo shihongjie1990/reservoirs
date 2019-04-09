@@ -36,6 +36,8 @@ import projectoverview from '@/components/owner/projectPrepare/projectOverview/p
 import statistics from '@/components/engineerDepartment/statistics/index'
 import preparetask from '@/components/owner/projectPrepare/prepareTask/prapare_task'
 import investmentfinancing from '@/components/owner/investmentFinancing/management'
+import imageManagement from '@/components/owner/projectPrepare/imageManagement/imageManager'
+import projectprocess from '@/components/owner/projectPrepare/projectProcess/management'
 // 备用
 import projectinfo from '@/components/owner/projectPrepare/projectOverview/project_info'
 import projectattachment from '@/components/owner/projectPrepare/projectOverview/project_attachment'
@@ -231,6 +233,16 @@ const currentRouter = new Router({
           path: '/projectprepare/preparetask',
           name: '前期工作',
           component: preparetask
+        },
+        {
+          path: '/projectprepare/projectprocess',
+          name: '工程进度',
+          component: projectprocess
+        },
+        {
+          path: '/projectprepare/imageManagement',
+          name: '水库图片',
+          component: imageManagement
         },
         { // 测试块
           path: '/projectprepare/projectinfo',

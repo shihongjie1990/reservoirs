@@ -75,7 +75,11 @@ const store = new Vuex.Store({
     menuList: [],
     expandMenu: true,
     user: '',
-    step: ''
+    step: '',
+    SHOW_IMG: {
+      flag: false,
+      url: ''
+    }
   },
   getters,
   mutations,
