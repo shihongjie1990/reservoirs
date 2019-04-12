@@ -108,16 +108,19 @@ export default {
               roles.push(role)
           }) */
           roles = authorities
-          if (roles.indexOf('ROLE_PLP') > -1) {
+          if (roles.indexOf('ROLE_PLP') > -1 || !roles || roles.length === 0 || !roles[0]) {
             let menuNode = this.$store.state.guestMenu.default
             this.$store.dispatch('setMenuList', menuNode)
             window.localStorage.MENU_NODE = this.Base64.encode(JSON.stringify(menuNode))
-            _this.getMyBaseInfo()
+            // _this.getMyBaseInfo()
+            this.$router.push({ path: '/overview' })
+            this.$store.dispatch('setRole', 'guest')
           } else {
             let menuNode = this.$store.state.managerMenu.default
             this.$store.dispatch('setMenuList', menuNode)
             window.localStorage.MENU_NODE = this.Base64.encode(JSON.stringify(menuNode))
             _this.$router.push({ path: '/home' })
+            this.$store.dispatch('setRole', 'manager')
           }
         }
       })

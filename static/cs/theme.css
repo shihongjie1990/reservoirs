@@ -198,7 +198,7 @@ span.el-tooltip>i:last-child {
   /* background: #fff; */
 }
 
-#_main>div:not(:first-child) {
+#_main>div:not(:first-child)>div {
   /* width: calc(100vw - 205px); */
   margin: 0 20px;
   padding: 10px 20px;
@@ -914,8 +914,9 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 .page-title.title {
   border-bottom: 1px solid #e0e0e0;
   background: #fff;
-  padding: 12px 0;
+  /* padding: 12px 0; */
   color: #757373;
+  line-height: 45px;
 }
 
 .publish-notice>div>span,
@@ -932,11 +933,13 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   content: '';
   position: relative;
   border: 2.5px solid #757373;
-  height: 12px;
+  height: 22px;
   border-radius: 5px;
   zoom: 0.7;
   left: -6px;
   top: -1px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .publish-notice>form {
@@ -1081,6 +1084,10 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 /* -----水库字典----- */
 .reservoir-list {
   margin: 20px;
+}
+
+.reservoir-list>.page-title.title {
+  margin: 0 !important;
 }
 
 .reservoir-list>.reservoir-operation {
@@ -1844,7 +1851,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 .prepare-task>.prepare-operation,
 .investment-financing>.tool-operation,
 .tender-manager>.contract-operation {
-  margin: 10px 0;
+  margin: 15px 0;
 }
 
 .status-operation {
@@ -1869,6 +1876,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   width: 100%;
   height: 100px;
   cursor: pointer;
+  position: relative;
 }
 
 .img-block>.image-div>img {
@@ -1876,13 +1884,31 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   height: 100%;
 }
 
+.img-block>.image-div>i,
+.image-div>i {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 18px;
+  padding: 3px;
+  color: #fff;
+}
+
+.img-block>.image-div>i:hover,
+.image-div>i:hover {
+  background: #fff;
+  border-radius: 20px;
+  color: #666;
+  cursor: pointer;
+}
+
 .attachment-view .img-block>.name-block,
 .attachment-view .img-block>.name-background {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   text-align: center;
   width: 100%;
-  padding: 8px 0;
+  padding: 2px 0;
   color: #fff;
 }
 
@@ -1998,6 +2024,15 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   margin: 0 auto;
 }
 
+.owner-paper .el-steps {
+  border-radius: 10px;
+  box-shadow: #c2c2c2 0px 0px 20px inset;
+}
+
+.owner-paper .el-step__icon-inner {
+  font-weight: 400;
+}
+
 .investment-status {
   padding: 10px 20px;
 }
@@ -2034,7 +2069,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 }
 
 .owner-paper {
-  padding: 0 !important;
+  /* padding: 0 !important; */
 }
 
 .owner-paper>.toolbar {
@@ -2042,7 +2077,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
 }
 
 .owner-paper>.attachment {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .paper-management .content {

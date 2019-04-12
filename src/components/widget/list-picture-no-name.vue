@@ -12,6 +12,8 @@
           <img :src="pic.url"
                class="image"
                @click.stop.prevent="showFullImg(pic.url)">
+          <i class="el-icon-download"
+             @click.stop="downloadFile(pic.fileAddr)"></i>
         </div>
         <div style="padding: 14px;"
              v-if="pic.desc">
@@ -69,6 +71,12 @@ export default {
         url: url
       }
       this.$store.dispatch('setShowImg', param)
+    },
+    downloadFile(addr) {
+      let Base64 = require('js-base64').Base64
+      let strBase = Base64.encode(Base64.encode(addr))
+      let url = location.origin + '/api/download/' + strBase
+      window.open(url, '_self')
     }
   }
 }

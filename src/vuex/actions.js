@@ -11,6 +11,12 @@ export const setRoleData = ({
   commit('roleDataState', roleData)
 }
 
+export const setRole = ({
+  commit
+}, role) => {
+  commit('ROLE_STATE', role)
+}
+
 export const setReservoirList = ({
   commit
 }, reservoirlist) => {
@@ -57,4 +63,16 @@ export const setShowImg = ({
   commit
 }, obj) => {
   commit('SHOW_IMG_STATE', obj)
+}
+
+export const setIsRegister = ({
+  commit
+}, flag) => {
+  commit('isRegistered_state', flag)
+}
+
+export const plusAxiosNum = ({
+  commit
+}, flag) => {
+  commit('AXIOS_NUMBER_STATE', flag)
 }

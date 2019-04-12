@@ -78,6 +78,11 @@
   display: block;
 }
 
+/* -------------------水雨情------------------------ */
+.water-rain>.el-row>.el-col {
+  margin: 20px 0;
+}
+
 /* -------------------图片全屏--------------------- */
 .view-full-pic {
   width: 100vw;
@@ -135,6 +140,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, .8);
+  position: relative;
 }
 
 .show-pic .image-div>img {
@@ -148,5 +154,54 @@
 
 /* -----------------------统一管理页面----------------- */
 .manager-page>.operation-area {
-  margin: 10px 0;
+  margin: 15px 0;
+}
+
+/* -----------------------搜索框位置------------------ */
+.search-area {
+  width: 350px;
+  float: right;
+}
+
+/* ------------------------补充空白-------------------- */
+.supplement-block {
+  padding-bottom: 15px;
+}
+
+/* ----------------------与标题间隔的内容--------------- */
+.page-content {
+  padding-top: 20px;
+}
+
+/* -----------------------调整月报步骤条---------------- */
+.owner-paper .el-steps--horizontal .el-step__icon-inner {
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.owner-paper .el-steps--horizontal .el-step__icon.is-icon {
+  width: 80px;
+  text-align: center;
+}
+
+.owner-paper .el-steps--horizontal .el-step__title {
+  width: 80px;
+  text-align: center;
+}
+
+/* --------------------------弹出框上传picture-card--------------------- */
+.dialog-upload .el-upload--picture-card {
+  width: 80px;
+  height: 80px;
+  line-height: 84px;
+}
+
+.dialog-upload .el-upload-list--picture-card .el-upload-list__item {
+  width: 80px;
+  height: 80px;
+}
+
+/* ---------------------------全局遮罩----------------------------------- */
+.loading-mask {
+  height: calc(100vh - 145px);
 }

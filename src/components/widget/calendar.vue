@@ -17,7 +17,7 @@
     <ul class="calendar-ul">
       <li v-for="(item, index) in month"
           :key="index">
-        <a @click="pressValue(item)"
+        <a @click="pressValue(item, checkedMonth.indexOf(parseInt(item)) > -1)"
            :title="item + '月'">{{ item }}
           <span>月</span>
           <i class="fa fa-check"
@@ -146,9 +146,9 @@ export default {
     }
   },
   methods: {
-    pressValue(value) {
+    pressValue(value, flag) {
       let date = this.year + '-' + value
-      this.$emit('clickMonth', date)
+      this.$emit('clickMonth', { date: date, flag: flag })
     },
     operateYear(flag) {
       let year = parseInt(this.year)

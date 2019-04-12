@@ -6,7 +6,7 @@
                  ref="upload"
                  multiple
                  :auto-upload="false"
-                 :on-preview="handlePictureCardPreview">
+                 :on-preview="$common.showFullScreenPic">
         <i class="el-icon-plus"></i>
       </el-upload>
       <div>
@@ -33,15 +33,6 @@ export default {
     }
   },
   methods: {
-    handlePictureCardPreview(file) {
-      /* this.dialogImageUrl = file.url
-      this.dialogVisible = true */
-      let param = {
-        flag: true,
-        url: file.url
-      }
-      this.$store.dispatch('setShowImg', param)
-    },
     uploadFile() {
       let widget = this.$refs.upload
       console.log(widget)

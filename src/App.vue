@@ -1,12 +1,14 @@
 <template>
   <div id="app">
     <router-view />
-    <a class="view-full-pic"
-       @click="closeImgShow"
-       v-if="$store.state.SHOW_IMG.flag">
-      <img :src="$store.state.SHOW_IMG.url"
-           alt="">
-    </a>
+    <transition name="el-fade-in-linear">
+      <a class="view-full-pic"
+         @click="closeImgShow"
+         v-if="$store.state.SHOW_IMG.flag">
+        <img :src="$store.state.SHOW_IMG.url"
+             alt="">
+      </a>
+    </transition>
   </div>
 </template>
 

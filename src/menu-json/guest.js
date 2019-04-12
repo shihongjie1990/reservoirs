@@ -66,11 +66,12 @@ const guest_menu = [{
     name: '项目资料',
     icon: 'fa-navicon',
     expand: false,
-    children: [{
-        name: '项目填报',
-        path: '/projectprepare/add',
-        icon: 'fa-pencil'
-      },
+    children: [
+      /* {
+              name: '项目填报',
+              path: '/projectprepare/add',
+              icon: 'fa-pencil'
+            }, */
       {
         name: '项目概览',
         path: '/projectprepare/projectoverview',
@@ -92,7 +93,7 @@ const guest_menu = [{
         icon: 'fa-file-text-o'
       },
       {
-        name: '工程进度',
+        name: '形象进度',
         path: '/projectprepare/projectprocess',
         icon: 'fa-tag'
       }
@@ -130,12 +131,12 @@ const guest_menu = [{
     expand: false,
     children: [{
         name: '水雨情',
-        path: '/investmentfinancing',
+        path: '/monitoring/waterrain',
         icon: 'fa-area-chart'
       },
       {
         name: '视频监控',
-        path: '/investmentfinancing',
+        path: '/monitoring/video',
         icon: 'fa-video-camera'
       }
     ]

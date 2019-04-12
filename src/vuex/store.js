@@ -79,7 +79,11 @@ const store = new Vuex.Store({
     SHOW_IMG: {
       flag: false,
       url: ''
-    }
+    },
+    isRegistered: true,
+    role: '',
+    // 全局loading
+    AXIOS_NUMBER: 0
   },
   getters,
   mutations,

@@ -9,6 +9,7 @@ import axios from 'axios'
 import VueCookies from 'vue-cookies'
 import store from './vuex/store'
 import 'babel-polyfill'
+import base64 from 'js-base64'
 // 自定义公用方法
 import common from './common/common'
 // import echarts from 'echarts'
@@ -23,41 +24,20 @@ Vue.use(VueCookies)
 axios.defaults.withCredentials = true
 // axios.defaults.baseURL = process.env.API_ROOT
 
-// 定义全局loading
-const loadHtml = () => {
-  let loading = Vue.prototype.$loading({
-    target: '#app',
-    lock: true,
-    text: 'Loading',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
-  })
-  return loading
-}
-
-let loadAll = {}
-
-Vue.prototype.$loadHtml = loadHtml
-
-let random = () => {
-  let timeNum = new Date().getTime()
-  let randomNum = Math.floor(Math.random() * (1000 - 1))
-  return timeNum + '' + randomNum
-}
-
 /**
  *  axios拦截器
  */
 axios.interceptors.request.use(config => {
-  /* let url = config.url
-  let fullUrl = url.replace('/api/', baseUrl)
-  config.url = fullUrl */
   // 设置全局loading
-  let withoutLoading = config.headers.withoutLoading
-  if (!withoutLoading) {
-    let mark = random()
-    config.timeMark = mark
-    loadAll[mark] = loadHtml()
+  let loadObj = config.loading
+  if (loadObj && Object.keys(loadObj).length > 0) {
+    config.loadmask = base64.Base64.encode(common.buildLoading(loadObj))
+  } else {
+    let withoutLoading = config.headers.withoutLoading
+    if (!withoutLoading) {
+      config.loadingMark = base64.Base64.encode(new Date())
+      store.dispatch('plusAxiosNum', true)
+    }
   }
   return config
 }, err => {
@@ -66,21 +46,31 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
   // 关闭全局loading
   let config = res.config
-  if (config.timeMark) {
-    loadAll[config.timeMark].close()
+  if (config) {
+    if (config.loadmask) {
+      let loadmask = base64.Base64.decode(config.loadmask)
+      common.closeLoading(loadmask)
+    } else if (config.loadingMark) {
+      store.dispatch('plusAxiosNum', false)
+    }
   }
   return res.data
 }, err => {
   // 关闭全局loading
   let config = err.config
-  if (config.timeMark) {
-    loadAll[config.timeMark].close()
+  if (config) {
+    if (config.loadmask) {
+      let loadmask = base64.Base64.decode(config.loadmask)
+      common.closeLoading(loadmask)
+    } else if (config.loadingMark) {
+      store.dispatch('plusAxiosNum', false)
+    }
   }
   if (err && err.response) {
     let status = err.response.status
-    if (status === 401 || status === '401') {
+    if (status === 401 || status === '401' || status === 403 || status === '403') {
       let data = err.response.data
-      Vue.prototype.$alert(data.content + ', 即将跳转到水利云登录页', '提示', {
+      Vue.prototype.$alert(data.content || data.message + ', 即将跳转到水利云登录页', '提示', {
         confirmButtonText: '确定',
         type: 'warning',
         callback: action => {
@@ -91,6 +81,16 @@ axios.interceptors.response.use(res => {
       // router.push('/login')
     }
   }
+  /* else {
+     Vue.prototype.$alert('登录超时, 即将跳转到水利云登录页', '提示', {
+       confirmButtonText: '确定',
+       type: 'warning',
+       callback: action => {
+         // location.href = 'http://10.233.31.177:31732/logout'
+         location.href = location.origin + '/api/logout'
+       }
+     })
+   } */
   // return Promise.reject(err)
   return Promise.reject(err.response)
 })
@@ -98,6 +98,7 @@ Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
+Vue.prototype.Base64 = base64.Base64
 Vue.prototype.$common = common
 
 /* eslint-disable no-new */

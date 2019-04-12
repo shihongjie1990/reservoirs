@@ -1,7 +1,9 @@
 <template>
   <div class="owner-paper">
-    <el-steps :active="activeNum"
-              simple>
+    <div class="title page-title"><span>月报填写</span></div>
+    <el-steps :active="activeNum - 1"
+              process-status="finish"
+              finish-status="success">
       <el-step title="基础信息"
                icon="fa fa-edit fa-lg"></el-step>
       <el-step title="投资情况"
@@ -43,6 +45,9 @@
                               type="month"
                               placeholder="选择月"
                               value-format="yyyy-MM">
+                <!-- <el-date-picker v-model="baseForm.submitDate"
+                              type="month"
+                              placeholder="选择月"> -->
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -572,14 +577,15 @@
       <el-upload class="upload-file"
                  ref="upload"
                  action=""
-                 drag
                  multiple
                  :auto-upload="false"
                  :file-list="fileList"
-                 list-type="picture"
+                 :on-preview="$common.showFullScreenPic"
+                 list-type="picture-card"
                  style="width:100%">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <i class="el-icon-plus"></i>
+        <!-- <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
       </el-upload>
     </div>
     <div class="toolbar">
@@ -606,7 +612,7 @@ export default {
       baseForm: {
         name: '',
         monthDate: '',
-        submitDate: new Date(),
+        submitDate: '',
         submitter: '',
         statisticalLeader: ''
       },
@@ -839,8 +845,8 @@ export default {
       /* this.investmentForm.submitter = this.baseForm.submitter
       this.investmentForm.statisticalLeader = this.baseForm.statisticalLeader */
       Object.assign(this.investmentForm, this.baseForm, this.projectForm)
-      this.investmentForm.submitDate = this.baseForm.submitDate + '-01'
-      this.$http.post('/api/pmr', this.investmentForm).then(res => {
+      this.investmentForm.submitDate = this.baseForm.submitDate + '-01 08:00:00'
+      this.$http.post('/api/pmr', this.investmentForm, { loading: { operation: true } }).then(res => {
         if (res.code === 1002) {
           this.$message({ type: 'success', message: '月报新增成功！' })
           this.$router.push({ path: '/monthpaper/management' })
@@ -859,7 +865,7 @@ export default {
             fd.append('uploadfile', raw)
           }
         })
-        this.$http.post('/api/file/uploadtempfiles', fd).then(res => {
+        this.$http.post('/api/file/uploadtempfiles', fd, { loading: { operation: true } }).then(res => {
           if (res.code === 1002) {
             this.investmentForm.tempFolderRelativePath = res.data
             this.$nextTick(() => {
@@ -883,9 +889,15 @@ export default {
   },
   mounted() {
     let param = this.$route.params
+    let dateString = ''
     if (param && param.createDate) {
-      this.baseForm.submitDate = param.createDate
+      dateString = param.createDate
+    } else {
+      let nowDate = new Date()
+      let month = nowDate.getMonth() + 1
+      dateString = nowDate.getFullYear() + '-' + (month < 10 ? '0' + month : month)
     }
+    this.baseForm.submitDate = dateString
   }
 }
 </script>

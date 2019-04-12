@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../vuex/store'
 import home from '@/Home'
-import HelloWorld from '@/components/HelloWorld'
+// import HelloWorld from '@/components/HelloWorld'
 import Test from '@/components/test'
 import empty from '@/components/empty'
 import MainContent from '@/MainContent'
@@ -38,6 +38,8 @@ import preparetask from '@/components/owner/projectPrepare/prepareTask/prapare_t
 import investmentfinancing from '@/components/owner/investmentFinancing/management'
 import imageManagement from '@/components/owner/projectPrepare/imageManagement/imageManager'
 import projectprocess from '@/components/owner/projectPrepare/projectProcess/management'
+import waterrainfall from '@/components/owner/monitoring/waterRain'
+import video from '@/components/owner/monitoring/video'
 // 备用
 import projectinfo from '@/components/owner/projectPrepare/projectOverview/project_info'
 import projectattachment from '@/components/owner/projectPrepare/projectOverview/project_attachment'
@@ -47,7 +49,6 @@ import addcontract from '@/components/owner/projectPrepare/invitationOfTender/co
 // import selecttree from '@/components/widget/SelectTree'
 import userlimit from '@/components/engineerDepartment/user/user_limit'
 import testChart from '@/components/engineerDepartment/statistics/test'
-// import video from '@/components/engineerDepartment/reservoir/reservoirItem/video'
 // import attachmentfiles from '@/components/owner/projectPrepare/prepareTask/attachmentFiles'
 
 import indexTest from '@/components/owner/index_test'
@@ -216,7 +217,7 @@ const currentRouter = new Router({
     },
     {
       path: '/projectprepare',
-      name: '项目前期',
+      name: '项目资料',
       component: MainContent,
       children: [{
           path: '/projectprepare/projectoverview',
@@ -236,7 +237,7 @@ const currentRouter = new Router({
         },
         {
           path: '/projectprepare/projectprocess',
-          name: '工程进度',
+          name: '形象进度',
           component: projectprocess
         },
         {
@@ -253,6 +254,16 @@ const currentRouter = new Router({
           path: '/projectprepare/projectattachment',
           name: 'projectattachment',
           component: projectattachment
+        },
+        {
+          path: '/tenders',
+          name: '招标管理',
+          component: tender
+        },
+        {
+          path: '/contracts',
+          name: '合同备案',
+          component: contractFiling
         }
       ]
     },
@@ -261,32 +272,20 @@ const currentRouter = new Router({
       name: '招标管理',
       component: MainContent,
       children: [{
-          path: '/',
-          name: '招标管理--父节点',
-          component: tender
-        },
-        {
-          path: '/tenders/add',
-          name: '新增标书',
-          component: tenderadd
-        }
-      ]
+        path: '/tenders/add',
+        name: '新增标书',
+        component: tenderadd
+      }]
     },
     {
       path: '/tenders',
       name: '合同备案',
       component: MainContent,
       children: [{
-          path: '/contracts',
-          name: '合同备案--父节点',
-          component: contractFiling
-        },
-        {
-          path: '/contracts/add',
-          name: '新增合同',
-          component: addcontract
-        }
-      ]
+        path: '/contracts/add',
+        name: '新增合同',
+        component: addcontract
+      }]
     },
     {
       path: '/monthpaper',
@@ -315,14 +314,30 @@ const currentRouter = new Router({
       ]
     },
     {
-      path: '/investmentfinancing',
-      name: '投融资',
+      path: '/applyfund',
+      name: '资金申请',
       component: MainContent,
       children: [{
-        path: '/',
-        name: '投融资--父节点',
+        path: '/investmentfinancing',
+        name: '投融资',
         component: investmentfinancing
       }]
+    },
+    {
+      path: '/monitoring',
+      name: '实时监测',
+      component: MainContent,
+      children: [{
+          path: '/monitoring/waterrain',
+          name: '水雨情',
+          component: waterrainfall
+        },
+        {
+          path: '/monitoring/video',
+          name: '视频监控',
+          component: video
+        }
+      ]
     },
     // 测试组件
     {
@@ -334,16 +349,6 @@ const currentRouter = new Router({
       path: '/testChart',
       name: testChart,
       component: testChart
-    },
-    {
-      path: '/hellow',
-      name: 'HelloWorld',
-      component: MainContent,
-      children: [{
-        path: '/',
-        name: '投融资--父节点',
-        component: HelloWorld
-      }]
     }
   ]
 })

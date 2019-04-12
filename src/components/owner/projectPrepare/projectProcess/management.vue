@@ -1,14 +1,15 @@
 <template>
   <div class="manager-page">
+    <div class="title page-title"><span>形象进度</span></div>
     <div class="operation-area">
       <el-button type="primary"
                  size="mini"
                  @click="dialogaddVisible = true"><i class="fa fa-plus-square-o fa-lg"></i> 新增进度</el-button>
       <el-button type="warning"
                  size="mini"
-                 @click="dialogaddVisible = true"><i class="fa fa-edit fa-lg"></i> 修改进度</el-button>
-      <el-button type="info"
-                 size="mini"><i class="fa fa-trash-o fa-lg"></i> 删除进度</el-button>
+                 @click="$common.inDevelop"><i class="fa fa-edit fa-lg"></i> 修改进度</el-button>
+      <!-- <el-button type="info"
+                 size="mini"><i class="fa fa-trash-o fa-lg"></i> 删除进度</el-button> -->
     </div>
     <el-table :data="tableData"
               border
@@ -24,7 +25,7 @@
                        align="center">
       </el-table-column>
       <el-table-column prop="title"
-                       label="工程进度名称"
+                       label="形象进度名称"
                        align="center">
       </el-table-column>
       <el-table-column prop="desc"
@@ -37,7 +38,7 @@
           <el-button size="small"
                      @click="viewFiles(scope.row.visualProgressImgVOs)"
                      type="text"
-                     v-if="scope.row.visualProgressImgVOs.length > 0">{{ scope.row.visualProgressImgVOs.length }}张</el-button>
+                     v-if="scope.row.visualProgressImgVOs && scope.row.visualProgressImgVOs.length > 0">{{ scope.row.visualProgressImgVOs.length }}张</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime"
@@ -62,20 +63,17 @@
                    @getAllProcess="getAllProcess"
                    v-if="dialogmodifyVisible"></add-process>
     </el-dialog>
-    <img :src="imageTest"
-         alt=""
-         style="width:200px;">
     <el-dialog title="附件"
                :visible.sync="dialogFilesVisible">
       <show-image v-if="dialogFilesVisible"
-                  :imgVOs="images"></show-image>
+                  :files="images"></show-image>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import add from './add'
-import showImage from '../imageManagement/showImage'
+import showImage from '@/components/widget/list-picture'
 
 export default {
   components: {
@@ -88,8 +86,7 @@ export default {
       dialogmodifyVisible: false,
       dialogFilesVisible: false,
       tableData: [],
-      images: [],
-      imageTest: 'static/images/4.png'
+      images: []
     }
   },
   methods: {
@@ -123,9 +120,6 @@ export default {
   },
   mounted() {
     this.getAllProcess()
-    this.$http.get('/api/files/upload/visualProgress/务川县冉渡滩水库/2019-4/1554798219999-timg1.jpg').then(res => {
-      this.imageTest = `data:${res}`
-    })
   }
 }
 </script>

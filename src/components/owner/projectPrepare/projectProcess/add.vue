@@ -8,7 +8,7 @@
       <el-col :lg="24"
               :md="24"
               :xs="24">
-        <el-form-item label="工程进度名称"
+        <el-form-item label="形象进度名称"
                       prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
@@ -30,10 +30,14 @@
                       class="upload-item">
           <el-upload action=""
                      :auto-upload="false"
+                     list-type="picture-card"
+                     :on-preview="$common.showFullScreenPic"
                      multiple
-                     ref="fileUpload">
-            <el-button size="mini"
-                       type="success"><i class="fa fa-upload"></i> 点击上传</el-button>
+                     ref="fileUpload"
+                     class="dialog-upload">
+            <i class="el-icon-plus"></i>
+            <!-- <el-button size="mini"
+                       type="success"><i class="fa fa-upload"></i> 点击上传</el-button> -->
             <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
         </el-form-item>
@@ -60,24 +64,33 @@ export default {
     return {
       form: {},
       rules: {
-
+        title: [
+          { required: true, message: '未输入名称', trigger: 'blur' }
+        ],
+        desc: [
+          { required: true, message: '未输入详情说明', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     submitAll() {
-      let files = this.$refs.fileUpload.uploadFiles
-      this.$common.uploadFile(files).then(id => {
-        id && (this.form.tempFolderRelativePath = id)
-        this.$http.post('/api/visualProgress', this.form).then(res => {
-          if (res.code === 1002) {
-            this.$message.success('新增成功！')
-            this.$emit('getAllProcess')
-            this.$emit('closeDialog')
-          } else {
-            this.$message.error(res.msg || res.content)
-          }
-        })
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          let files = this.$refs.fileUpload.uploadFiles
+          this.$common.uploadFile(files).then(id => {
+            id && (this.form.tempFolderRelativePath = id)
+            this.$http.post('/api/visualProgress', this.form, { loading: { operation: true } }).then(res => {
+              if (res.code === 1002) {
+                this.$message.success('新增成功！')
+                this.$emit('getAllProcess')
+                this.$emit('closeDialog')
+              } else {
+                this.$message.error(res.msg || res.content)
+              }
+            })
+          })
+        }
       })
     },
     uploadFile() {

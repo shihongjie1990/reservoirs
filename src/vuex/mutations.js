@@ -17,6 +17,10 @@ export const roleDataState = (state, roleData) => {
   state.roleData = roleData
 }
 
+export const ROLE_STATE = (state, role) => {
+  state.role = role
+}
+
 export const reservoirlistState = (state, reservoirlist) => {
   state.reservoirlist = reservoirlist
 }
@@ -47,4 +51,18 @@ export const stepState = (state, step) => {
 
 export const SHOW_IMG_STATE = (state, obj) => {
   state.SHOW_IMG = obj
+}
+
+export const isRegistered_state = (state, flag) => {
+  state.isRegistered = flag
+}
+
+export const AXIOS_NUMBER_STATE = (state, flag) => {
+  if (flag) {
+    state.AXIOS_NUMBER++
+  } else {
+    if (state.AXIOS_NUMBER > 0) {
+      state.AXIOS_NUMBER--
+    }
+  }
 }

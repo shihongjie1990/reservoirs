@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import showImage from './showImage'
+import showImage from '@/components/widget/list-picture-no-name'
 import uploadImage from './uploadImage'
 
 export default {
