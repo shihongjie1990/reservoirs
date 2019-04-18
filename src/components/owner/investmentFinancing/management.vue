@@ -131,7 +131,7 @@ export default {
           let id = selectedRows[0].annualInvestmentId
           this.$http.delete(`/api/annualinvestment/${id}`, { loading: { operation: true } }).then(res => {
             if (res.code === 1002) {
-              this.$message({ message: '删除成功!', type: 'error' })
+              this.$message({ message: '删除成功!', type: 'success' })
               this.getAllNodes()
             }
           })

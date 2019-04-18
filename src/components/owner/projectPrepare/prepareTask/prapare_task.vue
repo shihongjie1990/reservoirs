@@ -101,7 +101,8 @@
 <script>
 import addtask from './addTask'
 import modifytask from './modifyTask'
-import attachmentfiles from './attachmentFiles'
+// import attachmentfiles from './attachmentFiles'
+import attachmentfiles from '@/components/widget/list-picture'
 
 export default {
   components: {

@@ -2328,6 +2328,10 @@ table.detail-info-desc {
   background: #fff;
 }
 
+.attachment-block>i {
+  margin: 0 5px;
+}
+
 /* ---------------------------统计数据图表---------------------------- */
 .region-selected {
   position: absolute;

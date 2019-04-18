@@ -20,7 +20,7 @@
         <div v-loading="pageLoading"
              element-loading-text="拼命加载中"
              class="loading-mask">
-          <router-view v-show="!pageLoading" />
+          <router-view v-show="!pageLoading && $store.state.isRegistered" />
         </div>
       </transition>
     </div>
@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       pageLoading: false,
+      isRegister: false,
       expand: false,
       menuNode: this.$store.state.MenuNodes,
       step: '',

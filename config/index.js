@@ -12,7 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         // 测试环境
-        // target: 'http://202.98.195.97:8090',
+        // target: 'http://192.168.100.199:8080/portal-server',
         target: 'http://192.168.100.199:80',
         // target: 'http://pass.water-data.cn:30098',
         changeOrigin: true,
