@@ -581,6 +581,7 @@
                  :auto-upload="false"
                  :file-list="fileList"
                  :on-preview="$common.showFullScreenPic"
+                 :on-change="handleChange"
                  list-type="picture-card"
                  style="width:100%">
         <i class="el-icon-plus"></i>
@@ -606,7 +607,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       activeNum: 1,
       baseForm: {
@@ -782,7 +783,7 @@ export default {
     }
   },
   watch: {
-    'baseForm.submitDate'(curDate, oldDate) {
+    'baseForm.submitDate' (curDate, oldDate) {
       this.getMonthlyReportPostHistory(curDate).then(res => {
         let data = res.data
         this.investmentResponseData = data
@@ -791,7 +792,7 @@ export default {
     }
   },
   methods: {
-    validNum(rule, value, callback) {
+    validNum (rule, value, callback) {
       if (!value) {
         return callback(new Error('必填'))
       } else if (isNaN(value)) {
@@ -800,7 +801,15 @@ export default {
         callback()
       }
     },
-    nextStep() {
+    handleChange (file, files) {
+      let fileContent = file.raw
+      if (fileContent.type.indexOf('.sheet') > 0) {
+        file.url = 'static/images/excel.jpg?time=' + new Date().getTime()
+      } else if (fileContent.type.indexOf('.document') > 0) {
+        file.url = 'static/images/word.jpg'
+      }
+    },
+    nextStep () {
       let refName = ''
       let activeNum = this.activeNum
       switch (activeNum) {
@@ -825,11 +834,11 @@ export default {
         }
       })
     },
-    getMonthlyReportPostHistory(currentDate) {
+    getMonthlyReportPostHistory (currentDate) {
       let thisRequest = this.$http.get(`/api/pmr/historystatistic/${currentDate}`)
       return thisRequest
     },
-    changeValue(key) {
+    changeValue (key) {
       let thisValue = parseFloat(this.investmentForm[key])
       if (isNaN(thisValue)) {
         thisValue = 0
@@ -841,7 +850,7 @@ export default {
       this.investmentViewData[yearKey] = investmentResponseData[yearKey] + thisValue
       this.investmentViewData[sofarKey] = investmentResponseData[sofarKey] + thisValue
     },
-    detailSubmit() {
+    detailSubmit () {
       /* this.investmentForm.submitter = this.baseForm.submitter
       this.investmentForm.statisticalLeader = this.baseForm.statisticalLeader */
       Object.assign(this.investmentForm, this.baseForm, this.projectForm)
@@ -851,11 +860,11 @@ export default {
           this.$message({ type: 'success', message: '月报新增成功！' })
           this.$router.push({ path: '/monthpaper/management' })
         } else {
-          this.$alert(res.code, '警告', { type: 'error' })
+          this.$alert(res.msg || res.content || res.error, '警告', { type: 'error' })
         }
       })
     },
-    fileUpload() {
+    fileUpload () {
       let files = this.$refs.upload.uploadFiles
       if (files && files.length > 0) {
         let fd = new FormData()
@@ -878,7 +887,7 @@ export default {
     /**
      *  表单校验
      */
-    validateForm(formRef) {
+    validateForm (formRef) {
       // 三个表单 form1, investmentForm, engineerForm
       return new Promise((resolve, reject) => {
         this.$refs[formRef].validate((valid) => {
@@ -887,7 +896,7 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     let param = this.$route.params
     let dateString = ''
     if (param && param.createDate) {

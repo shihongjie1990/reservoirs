@@ -13,7 +13,7 @@ module.exports = {
       '/api': {
         // 测试环境
         // target: 'http://192.168.100.199:8080/portal-server',
-        target: 'http://192.168.100.199:80',
+        target: 'http://139.9.56.4:31774',
         // target: 'http://pass.water-data.cn:30098',
         changeOrigin: true,
         pathRewrite: {
