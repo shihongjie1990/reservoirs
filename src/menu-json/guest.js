@@ -51,7 +51,7 @@ const guest = [{
     ]
   },
   {
-    name: '投融资',
+    name: '资金申报',
     path: '/investmentfinancing',
     icon: 'fa-line-chart'
   }
@@ -120,7 +120,7 @@ const guest_menu = [{
     icon: 'fa-jpy',
     expand: false,
     children: [{
-      name: '投融资',
+      name: '资金申报',
       path: '/investmentfinancing',
       icon: 'fa-line-chart'
     }]

@@ -6,7 +6,7 @@
               :xs="24"
               class="reservoir-info">
         <div class="reservoir-desc">
-          <div class="title">冉渡滩水库</div>
+          <div class="title">{{ reservoir.plantName }}</div>
           <div>
             <!-- <img src="static/images/wallpaper.jpg"
                  alt=""

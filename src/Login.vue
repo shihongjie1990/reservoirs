@@ -86,12 +86,6 @@ export default {
           }
         ]
       }).then(res => {
-        if (res.status === 500) {
-          if (res.data.code === 10000) {
-            this.logErr = true
-            return
-          }
-        }
         let dataStr = res.data
         let dataDecode = this.Base64.decode(dataStr)
         let data = this.buildData(dataDecode)
@@ -115,12 +109,20 @@ export default {
             // _this.getMyBaseInfo()
             this.$router.push({ path: '/overview' })
             this.$store.dispatch('setRole', 'guest')
+            window.localStorage.RESERVOIR_ROLE = this.Base64.encode('guest')
           } else {
             let menuNode = this.$store.state.managerMenu.default
             this.$store.dispatch('setMenuList', menuNode)
             window.localStorage.MENU_NODE = this.Base64.encode(JSON.stringify(menuNode))
             _this.$router.push({ path: '/home' })
             this.$store.dispatch('setRole', 'manager')
+            window.localStorage.RESERVOIR_ROLE = this.Base64.encode('manager')
+          }
+        }
+      }, thisErr => {
+        if (thisErr.status === 500) {
+          if (thisErr.data.code === 10000) {
+            this.logErr = true
           }
         }
       })

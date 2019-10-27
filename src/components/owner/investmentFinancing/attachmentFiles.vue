@@ -33,7 +33,7 @@ export default {
             let imgExt = ['.png', '.jpg', '.jpeg', '.bmp', '.gif']
             files.map(item => {
                 let addr = item.fileAddr
-                item.name = addr.replace(/\S+\d{10,}-/g, '')
+                item.name = addr.replace(/\S+\d{10,}-([0-9a-zA-Z]){10,}-/g, '')
                 let type = addr.substr(addr.lastIndexOf('.'))
                 if (imgExt.indexOf(type) > -1) {
                     item.url = '/api/files/' + addr
@@ -44,7 +44,7 @@ export default {
             return files
         }
     },
-    mounted() {
+    created() {
         let files = this.files
         this.allFiles = this.dealFiles(files)
     }

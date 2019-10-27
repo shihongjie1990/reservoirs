@@ -1,75 +1,96 @@
 <template>
   <div class="investment-financing">
-    <div class="title page-title"><span>投融资</span></div>
+    <div class="title page-title"><span>资金申报</span></div>
     <div class="tool-operation">
       <el-button type="primary"
                  size="mini"
-                 @click="dialogaddVisible = true"><i class="fa fa-plus-square-o fa-lg"></i> 新增投资计划</el-button>
-      <el-button type="warning"
+                 v-if="isOperation"
+                 @click="dialogaddVisible = true"><i class="fa fa-plus-square-o fa-lg"></i> 新增资金申报</el-button>
+      <div v-else
+           class="apply-tips">提醒：只能在每个月的1-10号申报资金和撤销申报</div>
+      <!-- <el-button type="warning"
                  size="mini"
-                 @click="modifyPlan"><i class="fa fa-edit fa-lg"></i> 修改投资计划</el-button>
-      <el-button type="info"
+                 @click="modifyPlan"><i class="fa fa-edit fa-lg"></i> 修改资金申报</el-button> -->
+      <!-- <el-button type="info"
                  size="mini"
-                 @click="deletePlan"><i class="fa fa-edit fa-lg"></i> 删除投资计划</el-button>
+                 @click="deletePlan"><i class="fa fa-edit fa-lg"></i> 删除投资计划</el-button> -->
     </div>
     <el-table :data="tableData"
               border
-              style="width: 100%"
+              tooltip-effect="dark"
+              style="width: 100%; font-size:13px"
+              :header-cell-style="{background:'#e0e0e0',fontSize:'14px'}"
               @selection-change="handleSelectionChange"
-              id="investmentTable">
-      <el-table-column type="selection"
+              id="apply_money">
+      <!-- <el-table-column type="selection"
                        width="55"
                        align="center">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column type="index"
                        width="50"
                        label="序号"
                        align="center">
       </el-table-column>
-      <el-table-column prop="applyFigure"
-                       label="申报额（万元）"
+      <el-table-column prop="applicationDocId"
+                       label="来文编号"
                        align="center">
       </el-table-column>
-      <el-table-column prop="approvedFigure"
-                       label="核准额（万元）"
+      <el-table-column prop="applicationAmount"
+                       label="申请拨付金额（万元）"
+                       align="center"
+                       width="180">
+      </el-table-column>
+      <el-table-column prop="peirod"
+                       label="档期"
                        align="center">
       </el-table-column>
-      <el-table-column prop="submitter"
-                       label="更新人"
-                       align="center">
-      </el-table-column>
-      <el-table-column prop="year"
+      <el-table-column prop="createTime"
                        label="申报时间"
-                       :formatter="formatterDate"
                        align="center">
       </el-table-column>
-      <el-table-column label="附件"
+      <el-table-column prop="statusChn"
+                       label="当前状态"
+                       align="center">
+      </el-table-column>
+      <el-table-column label="操作"
                        align="center">
         <template slot-scope="scope">
           <el-button size="small"
-                     @click="viewFiles(scope.row.annualInvestmentFiles)"
+                     @click="viewInfo(scope.row.applicationId)"
+                     type="text">查看</el-button>
+          <el-button size="small"
+                     @click="cancleApply(scope.row.applicationId)"
                      type="text"
-                     v-if="scope.row.annualInvestmentFiles.length > 0">查看</el-button>
+                     v-if="scope.row.statusChn === '未处理'" :class="!isOperation ? 'warnBtn' : ''">撤销</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="新增投资计划"
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="pageOp.page"
+                   :page-sizes="[10, 20, 50, 100]"
+                   :page-size="pageOp.pageVolume"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="totalPage">
+    </el-pagination>
+    <el-dialog title="新增资金申报"
                :visible.sync="dialogaddVisible">
       <add-task @closeDialog="closeDialog"
                 @getAllNodes="getAllNodes"
                 v-if="dialogaddVisible"></add-task>
     </el-dialog>
-    <el-dialog title="修改投资计划"
+    <el-dialog title="修改资金申报"
                :visible.sync="dialogmodifyVisible">
       <modify-task :modifyData="modifyData"
                    @closeDialog="closeDialog"
                    @getAllNodes="getAllNodes"
                    v-if="dialogmodifyVisible"></modify-task>
     </el-dialog>
-    <el-dialog title="附件"
-               :visible.sync="dialogFilesVisible">
-      <attachment-files v-if="dialogFilesVisible"
-                        :files="files"></attachment-files>
+    <el-dialog title="详情"
+               :visible.sync="infoVisible">
+      <info-detail v-if="infoVisible"
+                   @closeDialog="closeDialog"
+                   :applicationId="applicationId"></info-detail>
     </el-dialog>
   </div>
 </template>
@@ -77,35 +98,81 @@
 <script>
 import addtask from './add'
 import modifytask from './modify'
-import attachmentfiles from '@/components/widget/list-picture'
+// import attachmentfiles from '@/components/widget/list-picture'
+import infoDetail from './infoDetail'
 
 export default {
   components: {
     'add-task': addtask,
     'modify-task': modifytask,
-    'attachment-files': attachmentfiles
+    'info-detail': infoDetail
   },
   data() {
     return {
       dialogaddVisible: false,
       dialogmodifyVisible: false,
       dialogFilesVisible: false,
+      infoVisible: false,
       tableData: [],
       rowDatas: [],
       modifyData: {},
-      files: []
+      applicationId: '',
+      pageOp: {
+        page: 1,
+        pageVolume: 10
+      },
+      totalPage: 0
+    }
+  },
+  computed: {
+    isOperation() {
+      let time = new Date()
+      let day = time.getDate()
+      if (day > 0 && day < 11) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
     getAllNodes() {
-      this.$http.get('/api/annualinvestment/own', { loading: { target: '#investmentTable' } }).then(res => {
+      let param = {loading: {target: '#apply_money'}}
+      Object.assign(param, this.pageOp)
+      this.$http.post('/api/fund/my-application-list', param).then(res => {
         if (res.code === 1002) {
-          this.tableData = res.data
+          this.tableData = res.data.list
+          this.pageOp.page = res.data.pageNum
+          this.pageOp.pageVolume = res.data.pageSize
+          this.totalPage = res.data.total
         }
       })
     },
     handleSelectionChange(rows) {
       this.rowDatas = rows
+    },
+    handleSizeChange(value) {
+      this.pageOp.pageVolume = value
+      this.getAllNodes()
+    },
+    handleCurrentChange(value) {
+      this.pageOp.page = value
+      this.getAllNodes()
+    },
+    viewInfo(id) {
+      this.applicationId = id
+      this.$nextTick(() => {
+        this.infoVisible = true
+      })
+    },
+    cancleApply(id) {
+      this.$http.delete(`/api/fund/${id}`, {loading: {target: '#apply_money'}}).then(res => {
+        if (res.code === 1002) {
+          this.getAllNodes()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
     modifyPlan() {
       let selectedRows = this.rowDatas
@@ -145,6 +212,7 @@ export default {
     closeDialog() {
       this.dialogaddVisible = false
       this.dialogmodifyVisible = false
+      this.infoVisible = false
     },
     formatterDate(row, option, value, index) {
       let date = new Date(value)
@@ -166,3 +234,16 @@ export default {
   }
 }
 </script>
+
+<style>
+.apply-tips {
+  color: #ff5555;
+  font-size: 16px;
+}
+.warnBtn {
+  color: #999!important;
+}
+.warnBtn:hover {
+  cursor: auto!important;
+}
+</style>

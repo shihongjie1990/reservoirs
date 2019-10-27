@@ -1910,6 +1910,7 @@ div.commission-content>ul.el-menu--horizontal>div>li.el-menu-item:hover {
   width: 100%;
   padding: 2px 0;
   color: #fff;
+  line-height: 16px;
 }
 
 .attachment-view .img-block>.name-background {

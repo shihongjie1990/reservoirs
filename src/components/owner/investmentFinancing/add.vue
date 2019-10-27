@@ -1,10 +1,69 @@
 <template>
   <el-form ref="form"
            :model="form"
-           label-width="135px"
+           label-width="200px"
            :rules="rules">
     <el-row :gutter="20">
+      <el-col :lg="24"
+              :md="24"
+              :xs="24">
+        <el-form-item label="来文编号"
+                      prop="applicationDocId">
+          <el-input v-model="form.applicationDocId"></el-input>
+        </el-form-item>
+      </el-col>
+      <!-- <el-col :lg="24"
+              :md="24"
+              :xs="24">
+        <el-form-item label="今年目标"
+                      prop="target">
+          <el-input v-model="form.target"></el-input>
+        </el-form-item>
+      </el-col> -->
       <el-col :lg="12"
+              :md="12"
+              :xs="12">
+        <el-form-item label="资金筹措情况（万元）"
+                      prop="countyFinancing">
+          <el-input v-model="form.countyFinancing"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :lg="12"
+              :md="12"
+              :xs="12">
+        <el-form-item label="资金累计拨付（万元）"
+                      prop="countyAccumulatedAllocation">
+          <el-input v-model="form.countyAccumulatedAllocation"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :lg="12"
+              :md="12"
+              :xs="12">
+        <el-form-item label="至今累计完成投资（万元）"
+                      prop="completedInvestmentSofar">
+          <el-input v-model="form.completedInvestmentSofar"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :lg="12"
+              :md="12"
+              :xs="12">
+        <el-form-item label="本年累计完成投资（万元）"
+                      prop="completedInvestmentCurrentYear">
+          <el-input v-model="form.completedInvestmentCurrentYear"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :lg="24"
+              :md="24"
+              :xs="24">
+        <el-form-item label="主要依据"
+                      prop="basis">
+          <el-input v-model="form.basis"
+                    type="textarea"
+                    :rows="4"
+                    placeholder="请输入内容"></el-input>
+        </el-form-item>
+      </el-col>
+      <!-- <el-col :lg="12"
               :md="12"
               :xs="12">
         <el-form-item label="申报时间："
@@ -23,23 +82,30 @@
                       prop="submitter">
           <el-input v-model="form.submitter"></el-input>
         </el-form-item>
+      </el-col> -->
+      <el-col :lg="12"
+              :md="12"
+              :xs="24">
+        <el-form-item label="申请拨付金额"
+                      prop="applicationAmount">
+          <el-input v-model="form.applicationAmount"></el-input><span class="last-unit">（万元）</span>
+        </el-form-item>
       </el-col>
       <el-col :lg="12"
               :md="12"
               :xs="24">
-        <el-form-item label="申报额（万元）:"
-                      prop="applyFigure">
-          <el-input v-model="form.applyFigure"></el-input>
+        <el-form-item label="大写:">
+          <span>{{ cnumeral }}</span>
         </el-form-item>
       </el-col>
-      <el-col :lg="12"
+      <!-- <el-col :lg="12"
               :md="12"
               :xs="24">
         <el-form-item label="核准额（万元）："
                       prop="approvedFigure">
           <el-input v-model="form.approvedFigure"></el-input>
         </el-form-item>
-      </el-col>
+      </el-col> -->
       <el-col :lg="24"
               :md="24"
               :xs="24">
@@ -82,21 +148,40 @@
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        basis: '201X年省级开工X型水库，中央资金计划未下达。目前处于XX阶段。按照进度及资金构成，中央+省级应拨XX万元，按投资构成省级资金已全部拨付并垫付中央资金XX万元；项目共同投资协议已签订，省级融资贷款已落实，市县配套资金到位XX万元。'
+      },
       rules: {
-        year: [
+        applicationDocId: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        submitter: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
-        applyFigure: [
+        countyFinancing: [
           { required: true, validator: this.validNum, trigger: 'blur' }
         ],
-        approvedFigure: [
+        countyAccumulatedAllocation: [
+          { required: true, validator: this.validNum, trigger: 'blur' }
+        ],
+        completedInvestmentSofar: [
+          { required: true, validator: this.validNum, trigger: 'blur' }
+        ],
+        completedInvestmentCurrentYear: [
+          { required: true, validator: this.validNum, trigger: 'blur' }
+        ],
+        basis: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        applicationAmount: [
           { required: true, validator: this.validNum, trigger: 'blur' }
         ]
-      }
+      },
+      cnumeral: ''
+    }
+  },
+  watch: {
+    'form.applicationAmount'(curValue, oldValue) {
+      let cnumeral = this.numbertoChinese(curValue * 10000)
+      this.cnumeral = cnumeral
+      this.form.applicationAmountChn = cnumeral
     }
   },
   methods: {
@@ -109,8 +194,24 @@ export default {
         callback()
       }
     },
+    // 大小写转换
+    numbertoChinese(str) {
+      var num = parseFloat(str)
+      let strOutput = ''
+      let strUnit = '仟佰拾亿仟佰拾万仟佰拾元角分'
+      num += '00'
+      var intPos = num.indexOf('.')
+      if (intPos >= 0) {
+        num = num.substring(0, intPos) + num.substr(intPos + 1, 2)
+      }
+      strUnit = strUnit.substr(strUnit.length - num.length)
+      for (var i = 0; i < num.length; i++) {
+        strOutput += '零壹贰叁肆伍陆柒捌玖'.substr(num.substr(i, 1), 1) + strUnit.substr(i, 1)
+      }
+      return strOutput.replace(/零角零分$/, '整').replace(/零[仟佰拾]/g, '零').replace(/零{2,}/g, '零').replace(/零([亿|万])/g, '$1').replace(/零+元/, '元').replace(/亿零{0,3}万/, '亿').replace(/^元/, '零元')
+    },
     submitPlan() {
-      this.$http.post('/api/annualinvestment', this.form, { loading: { operation: true } }).then(res => {
+      this.$http.post('/api/fund', this.form, { loading: { operation: true } }).then(res => {
         if (res.code === 1002) {
           this.$message({ type: 'success', message: '添加成功！' })
           this.$emit('getAllNodes')
@@ -127,6 +228,55 @@ export default {
           }
         }
       })
+    },
+    uploadFiles() {
+      let files = this.$refs.fileUpload.uploadFiles
+      if (files && files.length > 0) {
+        let fd = new FormData()
+        let fileUpload = () => {
+          this.$http.post('/api/file/uploadtempfiles', fd).then(res => {
+            if (res.code === 1002) {
+              this.form.tempFolderRelativePath = res.data
+              this.$nextTick(() => {
+                // 提交修改信息
+                /*  this.$http.put(`/api/`, this.form).then(result => {
+                   if (result.code === 1002) {
+                     this.$message({ type: 'success', message: `${this.form.plantName}修改成功` })
+                     this.$router.push({ path: '/reservoirs' })
+                   } else {
+                     this.$alert(result.data, '错误', { type: 'warning' })
+                   }
+                 }, resultErr => {
+                   this.$alert('修改失败', '错误', { type: 'warning' })
+                 }) */
+                this.submitPlan()
+              })
+            }
+          })
+        }
+        let defList = []
+        files.map((item, index) => {
+          let raw = item.raw
+          if (item.raw) {
+            fd.append('uploadfile', raw)
+          } else {
+            let defItem = new Promise((resolve, reject) => {
+              this.getImageFileFromUrl(item.url, item.name).then(file => {
+                fd.append('uploadfile', file)
+                resolve()
+              })
+            })
+            defList.push(defItem)
+          }
+        })
+        if (defList.length === 0) {
+          fileUpload()
+        } else {
+          Promise.all(defList).then(fileList => {
+            fileUpload()
+          })
+        }
+      }
     },
     submitAll() {
       this.$refs['form'].validate((valid) => {

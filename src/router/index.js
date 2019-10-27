@@ -319,7 +319,7 @@ const currentRouter = new Router({
       component: MainContent,
       children: [{
         path: '/investmentfinancing',
-        name: '投融资',
+        name: '资金申报',
         component: investmentfinancing
       }]
     },
@@ -336,6 +336,22 @@ const currentRouter = new Router({
           path: '/monitoring/video',
           name: '视频监控',
           component: video
+        }
+      ]
+    },
+    {
+      path: '/backlog',
+      name: '待办',
+      component: MainContent,
+      children: [{
+          path: 'manager',
+          name: '管理',
+          component: () => import('@/components/engineerDepartment/backlog/manager.vue')
+        },
+        {
+          path: 'detail',
+          name: '详情',
+          component: () => import('@/components/engineerDepartment/backlog/infoDetail.vue')
         }
       ]
     },
