@@ -56,7 +56,7 @@ export default {
             }
         },
         getMyBaseInfo(Base64) {
-            this.$http.get('/api/baseinfo/mybaseinfo').then(res => {
+            this.$http.get('/api/user/mybaseinfo').then(res => {
                 if (res.code === 1002) {
                     let reservoir = res.data
                     this.$store.dispatch('setReservoir', reservoir)

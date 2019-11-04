@@ -6,7 +6,27 @@
               :xs="24"
               class="reservoir-info">
         <div class="reservoir-desc">
-          <div class="title">{{ reservoir.plantName }}</div>
+          <div class="title">
+            <span>{{ reservoir.plantName }}</span>
+            <span v-if="showLabel">
+              当前阶段：{{ stateType }}
+              <i class="el-icon-edit"
+                 @click="changeState"></i>
+            </span>
+            <span v-else>
+              <el-select v-model="stateId"
+                         placeholder="请选择"
+                         ref="stateSelection">
+                <el-option v-for="item in options"
+                           :key="item.stateId"
+                           :label="item.type"
+                           :value="item.stateId">
+                </el-option>
+              </el-select>
+              <i class="el-icon-back"
+                 @click="cancleChangeState"></i>
+            </span>
+          </div>
           <div>
             <!-- <img src="static/images/wallpaper.jpg"
                  alt=""
@@ -138,13 +158,33 @@ export default {
     calendar
   },
   watch: {
-    '$store.state.AXIOS_NUMBER'(curValue, oldValue) {
+    '$store.state.AXIOS_NUMBER' (curValue, oldValue) {
       if (curValue === 0) {
         this.loadWaterRainInfo()
       }
+    },
+    stateId (curValue, oldValue) {
+      if (curValue > oldValue) {
+        this.$confirm('此操作不可逆，请谨慎操作。 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(`/api/baseinfo/updatePlantState?stateId=${curValue}`, { headers: { withoutLoading: true } }).then(res => {
+            if (res.code === 1002) {
+              this.stateType = this.$refs.stateSelection.selectedLabel
+              this.showLabel = true
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        }).catch(() => {
+          this.stateId = oldValue
+        })
+      }
     }
   },
-  data() {
+  data () {
     return {
       noticeList: [],
       pagerOp: {
@@ -160,23 +200,41 @@ export default {
       projectPaperDate: {},
       projectPaper: {},
       rainFall: '',
-      waterLevel: ''
+      waterLevel: '',
+      showLabel: true,
+      options: [],
+      stateId: '',
+      stateType: ''
     }
   },
   methods: {
+    changeState () {
+      this.showLabel = false
+      this.$http.get('/api/baseinfo/getAvailablePlantStates', { headers: { withoutLoading: true } }).then(res => {
+        if (res.code === 1002) {
+          this.options = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    cancleChangeState () {
+      this.showLabel = true
+      this.stateId = ''
+    },
     // 全屏图片
-    showFullImg(url) {
+    showFullImg (url) {
       let param = {
         flag: true,
         url: url
       }
       this.$store.dispatch('setShowImg', param)
     },
-    getAnnouncements(pagerOp) {
+    getAnnouncements (pagerOp) {
       let thisRequest = this.$http.post('/api/announcement/page', pagerOp)
       return thisRequest
     },
-    getCurrentDate() {
+    getCurrentDate () {
       let date = new Date()
       let fullDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
       let startTime = fullDate + ' 00:00:00'
@@ -186,15 +244,18 @@ export default {
         endTime: endTime
       }
     },
-    skipTo(item) {
+    skipTo (item) {
       this.$router.push({ name: '公告展示', params: { announcementId: item.announcementId } })
     },
-    getMyBaseInfo(Base64) {
-      this.$http.get('/api/baseinfo/mybaseinfo').then(res => {
+    getMyBaseInfo (Base64) {
+      this.$http.get('/api/user/mybaseinfo').then(res => {
         if (res.code === 1002) {
           let reservoir = res.data
           this.reservoir = reservoir
           window.localStorage.RESERVOIR = Base64.encode(JSON.stringify(reservoir))
+          let plantStateVO = reservoir.plantStateVO
+          this.stateType = plantStateVO.type
+          // this.stateId = plantStateVO.type
         } else {
           window.localStorage.RESERVOIR = ''
         }
@@ -203,7 +264,7 @@ export default {
     /**
      *  获取水雨情信息---降雨量
      */
-    getAllRainFallData(baseInfoId) {
+    getAllRainFallData (baseInfoId) {
       let currentHalfHour = this.getCurrentDate()
       let thisRequest = this.$http.get('/api/communication/getallrainfalldata', {
         params: {
@@ -217,7 +278,7 @@ export default {
     /**
      *  获取水雨情信息---水位、流量
      */
-    getAllWaterLevelData(baseInfoId) {
+    getAllWaterLevelData (baseInfoId) {
       let currentHalfHour = this.getCurrentDate()
       let thisRequest = this.$http.get('/api/communication/getallwaterleveldata', {
         params: {
@@ -231,7 +292,7 @@ export default {
     /**
      *  水位、流量数据处理
      */
-    otherDataFun(data) {
+    otherDataFun (data) {
       let xAxisData = []
       let seriesHeightData = []
       let serierFlowData = []
@@ -277,7 +338,7 @@ export default {
     /**
      *  降雨量数据处理
      */
-    rainSituationDataFun(data, xAxisKey, seriesKey) {
+    rainSituationDataFun (data, xAxisKey, seriesKey) {
       let xAxisData = []
       let seriesData = []
       let legendData = []
@@ -304,7 +365,7 @@ export default {
       })
       return { legendData: legendData, xAxisData: xAxisData, seriesData: seriesData }
     },
-    initRainChart(data, id, chartName, yName) {
+    initRainChart (data, id, chartName, yName) {
       let rainEchart = echarts.init(document.getElementById(id))
       let option = {
         title: {
@@ -351,7 +412,7 @@ export default {
       rainEchart.setOption(option)
     },
     // 获取所有月报信息
-    getAllMonthPaper() {
+    getAllMonthPaper () {
       this.$http.get('/api/pmr/perall').then(res => {
         if (res.code === 1002) {
           let papers = res.data
@@ -379,7 +440,7 @@ export default {
       })
     },
     // 点击日历月份跳转到月报信息
-    clickMonth(data) {
+    clickMonth (data) {
       if (!data.flag) {
         this.$router.push({ name: '月报填写', params: { createDate: data.date } })
       } else {
@@ -392,7 +453,7 @@ export default {
       // this.$router.push({ name: '月报详情', params: { monthPaper: {} } }) //  monthPaper为月报信息对象含projectMonthlyReportId
     },
     // 加载水雨情信息
-    loadWaterRainInfo() {
+    loadWaterRainInfo () {
       this.rainFall.then(res => {
         let rainData = res.data
         let thisRainData = this.rainSituationDataFun(rainData, 'tm', 'drp')
@@ -408,7 +469,7 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     // 获取月报信息
     this.getAllMonthPaper()
     // 获取公告信息
@@ -430,3 +491,38 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.reservoir-desc > .title {
+  position: relative;
+}
+.reservoir-desc > .title > span:last-child {
+  font-size: 12px;
+  display: block;
+  font-weight: normal;
+  position: absolute;
+  top: 18px;
+  right: 10px;
+}
+.reservoir-desc > .title > span:last-child > i {
+  border-radius: 10px;
+  padding: 3px;
+  background: #4d7b8f;
+  color: #fff;
+}
+.reservoir-desc > .title > span:last-child > i:hover {
+  cursor: pointer;
+  background: #0fb6ff;
+}
+</style>
+
+<style>
+.reservoir-desc > .title > span:last-child > .el-select {
+  width: 120px !important;
+  height: 20px !important;
+}
+.reservoir-desc > .title > span:last-child > .el-select input {
+  height: 20px !important;
+  font-size: 12px !important;
+}
+</style>

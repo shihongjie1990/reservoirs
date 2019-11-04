@@ -54,7 +54,14 @@ axios.interceptors.response.use(res => {
       store.dispatch('plusAxiosNum', false)
     }
   }
-  return res.data
+  let data = res.data
+  if (data.code === 0) {
+    Vue.prototype.$message.warning(data.msg)
+    store.dispatch('setIsRegister', null)
+    return null
+  } else {
+    return res.data
+  }
 }, err => {
   // 关闭全局loading
   let config = err.config
@@ -100,6 +107,13 @@ Vue.config.productionTip = false
 
 Vue.prototype.Base64 = base64.Base64
 Vue.prototype.$common = common
+
+// 获取用户信息
+let roleStr = window.localStorage.RESERVOIR_ROLE
+if (roleStr) {
+  let role = base64.Base64.decode(roleStr)
+  store.dispatch('setRole', role)
+}
 
 /* eslint-disable no-new */
 new Vue({

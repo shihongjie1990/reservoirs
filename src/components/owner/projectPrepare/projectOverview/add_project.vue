@@ -62,6 +62,7 @@
             <el-cascader :options="options"
                          :show-all-levels="false"
                          ref="regionSelector"
+                         v-model="region"
                          @change="selectedRegion"></el-cascader>
           </el-form-item>
         </el-col>
@@ -244,11 +245,25 @@
         <el-col :lg="8"
                 :md="12"
                 :xs="12">
+          <el-form-item label="开工日期"
+                        prop="commenceDate">
+            <el-date-picker v-model="form.commenceDate"
+                            type="date"
+                            placeholder="选择日期"
+                            value-format="yyyy-MM-dd">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :lg="8"
+                :md="12"
+                :xs="12">
           <el-form-item label="工期（月）"
                         prop="timeLimit">
             <el-input v-model="form.timeLimit"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="20">
         <el-col :lg="8"
                 :md="12"
                 :xs="12">
@@ -265,6 +280,8 @@
             <el-input v-model="form.areaCoverage"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="20">
         <el-col :lg="8"
                 :md="12"
                 :xs="12">
@@ -422,6 +439,7 @@
                  ref="fileUpload"
                  multiple
                  :auto-upload="false"
+                 :on-preview="$common.showFullScreenPic"
                  :file-list="fileList">
         <!-- <el-button size="small" type="primary">点击上传</el-button> -->
         <i class="el-icon-plus"></i>
@@ -436,7 +454,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       form: {
         affiliatedTo: 'govern',
@@ -539,12 +557,18 @@ export default {
         ],
         overview: [
           { required: true, message: '必填', trigger: 'blur' }
+        ],
+        commenceDate: [
+          { required: true, message: '必填', trigger: 'blur' }
         ]
-      }
+      },
+      isAdd: true,
+      region: [],
+      optionsOrigin: []
     }
   },
   methods: {
-    validNum(rule, value, callback) {
+    validNum (rule, value, callback) {
       if (!value) {
         return callback(new Error('必填'))
       } else if (isNaN(value)) {
@@ -553,41 +577,65 @@ export default {
         callback()
       }
     },
-    detailSubmit() {
+    addProject () {
+      this.$http.post('/api/pre/registerProject', this.form, { loading: { operation: true } }).then(result => {
+        if (result.code === 1002) {
+          this.$message({ type: 'success', message: '创建成功！' })
+          this.getMyBaseInfo().then(res => {
+            if (res.code === 1002) {
+              let reservoir = res.data
+              this.reservoir = reservoir
+              window.localStorage.RESERVOIR = this.Base64.encode(JSON.stringify(reservoir))
+            } else {
+              window.localStorage.RESERVOIR = ''
+            }
+          })
+          this.$router.push({ path: '/projectprepare/projectoverview' })
+          this.$store.dispatch('setIsRegister', true)
+        } else {
+          this.$alert(result.data, '错误', { type: 'warning' })
+        }
+      }, resultErr => {
+        this.$alert('创建失败！', '错误', { type: 'warning' })
+      })
+    },
+    modifyProject () {
+      this.$http.put(`/api/pre/baseInfo/${this.form.baseInfoId}`, this.form).then(res => {
+        if (res.code === 1002) {
+          this.$message.success('修改成功！')
+          // window.location.reload()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    submitChoice () {
+      this.form.hasSignedConstructionContract = this.form.hasSignedConstructionContract ? '是' : '否'
+      this.form.hasAcceptCompletion = this.form.hasAcceptCompletion ? '是' : '否'
+      this.form.hasProjectCompleted = this.form.hasProjectCompleted ? '是' : '否'
+      if (this.isAdd) {
+        this.addProject()
+      } else {
+        this.modifyProject()
+      }
+    },
+    detailSubmit () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let files = this.$refs.fileUpload.uploadFiles
           this.$common.uploadFile(files).then(id => {
-            id && (this.form.tempFolderRelativePath = id)
-            this.$http.post('/api/pre/registerProject', this.form, { loading: { operation: true } }).then(result => {
-              if (result.code === 1002) {
-                this.$message({ type: 'success', message: '创建成功！' })
-                this.getMyBaseInfo()
-                this.$router.push({ path: '/projectprepare/projectoverview' })
-                this.$store.dispatch('setIsRegister', true)
-              } else {
-                this.$alert(result.data, '错误', { type: 'warning' })
-              }
-            }, resultErr => {
-              this.$alert('创建失败！', '错误', { type: 'warning' })
+            this.form.tempFolderRelativePath = id
+            this.$nextTick(() => {
+              this.submitChoice()
             })
           })
         }
       })
     },
-    getMyBaseInfo() {
-      let Base64 = require('js-base64').Base64
-      this.$http.get('/api/baseinfo/mybaseinfo', { loading: { target: '#addProject' } }).then(res => {
-        if (res.code === 1002) {
-          let reservoir = res.data
-          this.reservoir = reservoir
-          window.localStorage.RESERVOIR = Base64.encode(JSON.stringify(reservoir))
-        } else {
-          window.localStorage.RESERVOIR = ''
-        }
-      })
+    getMyBaseInfo () {
+      return this.$http.get('/api/user/mybaseinfo', { loading: { target: '#addProject' } })
     },
-    getAllRegion() {
+    getAllRegion () {
       this.$http.get('/api/region/all', { loading: { target: '#addProject' } }).then(res => {
         let data = res.data
         if (data && data.length > 0) {
@@ -599,16 +647,48 @@ export default {
         }
         let treeData = this.$store.state.buildTree(data, 'regionId', 'parentId')
         this.options = treeData
+        this.optionsOrigin = res.data
       })
     },
-    selectedRegion(value) {
+    selectedRegion (value) {
       let widget = this.$refs.regionSelector
       this.form.regionId = value[value.length - 1]
       this.form.county = widget.currentLabels[value.length - 1]
+      console.log(value)
+    },
+    findRegionId (regionId) {
+      let regionIds = []
+      let findloop = function (id, data) {
+        let findData = data.find(item => {
+          return item.regionId === id
+        })
+        regionIds.push(findData.regionId)
+        if (findData.parentId) {
+          findloop(findData.parentId, data)
+        }
+      }
+      findloop(regionId, this.optionsOrigin)
+      return regionIds.reverse()
     }
   },
-  mounted() {
+  mounted () {
     this.getAllRegion()
+    let isRegister = this.$store.state.isRegister
+    if (isRegister === null || isRegister === undefined) {
+      this.isAdd = false
+      this.getMyBaseInfo().then(res => {
+        if (res.code === 1002) {
+          this.form = res.data
+          this.region = this.findRegionId(res.data.regionId)
+          this.form.hasSignedConstructionContract = res.data.hasSignedConstructionContract === '是'
+          this.form.hasAcceptCompletion = res.data.hasAcceptCompletion === '是'
+          this.form.hasProjectCompleted = res.data.hasProjectCompleted === '是'
+          this.fileList = this.$common.pushAttachment(res.data.baseInfoFiles)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
   }
 }
 </script>

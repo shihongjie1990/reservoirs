@@ -151,7 +151,7 @@ export default {
       this.logErr = false
     },
     getMyBaseInfo() {
-      this.$http.get('/api/baseinfo/mybaseinfo').then(res => {
+      this.$http.get('/api/user/mybaseinfo').then(res => {
         if (res.code === 1002) {
           let reservoir = res.data
           this.$store.dispatch('setReservoir', reservoir)

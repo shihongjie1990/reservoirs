@@ -135,7 +135,7 @@ export default {
       this.$router.push({ name: '公告展示', params: { announcementId: item.announcementId } })
     },
     getMyBaseInfo(Base64) {
-      this.$http.get('/api/baseinfo/mybaseinfo').then(res => {
+      this.$http.get('/api/user/mybaseinfo').then(res => {
         if (res.code === 1002) {
           let reservoir = res.data
           this.reservoir = reservoir

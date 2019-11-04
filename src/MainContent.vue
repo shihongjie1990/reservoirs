@@ -53,7 +53,7 @@
                :show-close="false"
                :visible="!$store.state.isRegistered"
                width="80%">
-      <add-project></add-project>
+      <add-project v-if="!$store.state.isRegistered"></add-project>
     </el-dialog>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     'v-footer': footer,
     'add-project': addProject
   },
-  data() {
+  data () {
     return {
       pageLoading: false,
       isRegister: false,
@@ -93,24 +93,24 @@ export default {
     }
   },
   watch: {
-    '$store.state.MenuNodes'(curValue, oldValue) {
+    '$store.state.MenuNodes' (curValue, oldValue) {
       this.menuNode = curValue
     },
-    '$store.state.expandMenu'(curValue, oldValue) {
+    '$store.state.expandMenu' (curValue, oldValue) {
       this.expand = !curValue
     },
-    '$store.state.step'(curValue, oldValue) {
+    '$store.state.step' (curValue, oldValue) {
       if (curValue) {
         this.shadeClass = 'shade'
       }
       this.step = curValue
     },
-    '$store.state.AXIOS_NUMBER'(curValue, oldValue) {
+    '$store.state.AXIOS_NUMBER' (curValue, oldValue) {
       this.pageLoading = curValue !== 0
     }
   },
   methods: {
-    stepTo(flag) {
+    stepTo (flag) {
       let index = this.$refs.aside.handleStep(flag)
       this.index = index
       if (index === 1) {
@@ -122,7 +122,7 @@ export default {
         this.nextBtn = true
       }
     },
-    closeStep() {
+    closeStep () {
       this.shadeClass = ''
       this.step = ''
       this.preBtn = false
@@ -130,8 +130,8 @@ export default {
       this.index = 1
       this.$refs.aside.closeStep()
     },
-    getMyBaseInfo() {
-      this.$http.get('/api/baseinfo/mybaseinfo').then(res => {
+    getMyBaseInfo () {
+      this.$http.get('/api/user/mybaseinfo').then(res => {
         if (res.code === 1002) {
           let reservoir = res.data
           this.$store.dispatch('setReservoir', reservoir)
@@ -140,16 +140,16 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     let role = this.$store.state.role
     if (role === 'guest') {
-      this.getMyBaseInfo()
       this.$http.get('/api/pre/hasRegistered').then(res => {
-        /* if (!res) {
-          this.dialogVisible = true
-        } */
-        this.$store.dispatch('setIsRegister', res)
+        if (this.$store.state.isRegister !== null) {
+          this.$store.dispatch('setIsRegister', res)
+        }
       })
+      //  this.$store.dispatch('setIsRegister', null)
+      this.getMyBaseInfo()
     } else {
       this.$store.dispatch('setIsRegister', true)
     }

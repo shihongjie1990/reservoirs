@@ -370,7 +370,7 @@ export default {
     },
     methods: {
         getBaseInfoById(baseInfoId) {
-            let thisRequest = this.$http.get(`/api/baseinfo/mybaseinfo`)
+            let thisRequest = this.$http.get(`/api/user/mybaseinfo`)
             return thisRequest
         },
         // 获取生命周期信息
