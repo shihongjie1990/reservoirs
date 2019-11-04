@@ -569,7 +569,7 @@ export default {
   },
   methods: {
     validNum (rule, value, callback) {
-      if (!value) {
+      if (value !== 0 && !value) {
         return callback(new Error('必填'))
       } else if (isNaN(value)) {
         return callback(new Error('只能填数字！'))
@@ -603,7 +603,9 @@ export default {
       this.$http.put(`/api/pre/baseInfo/${this.form.baseInfoId}`, this.form).then(res => {
         if (res.code === 1002) {
           this.$message.success('修改成功！')
-          // window.location.reload()
+          setTimeout(function() {
+            window.location.reload()
+          }, 300)
         } else {
           this.$message.error(res.msg)
         }
