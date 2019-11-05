@@ -143,8 +143,10 @@ export default {
   mounted () {
     let role = this.$store.state.role
     if (role === 'guest') {
+      let _this = this
       this.$http.get('/api/pre/hasRegistered').then(res => {
-        if (this.$store.state.isRegister !== null) {
+        console.log('测试用例', _this.$store.state.isRegistered)
+        if (this.$store.state.isRegistered !== null) {
           this.$store.dispatch('setIsRegister', res)
         }
       })
