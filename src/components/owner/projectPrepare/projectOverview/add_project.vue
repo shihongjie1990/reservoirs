@@ -14,7 +14,7 @@
                 <el-radio-button label="corp">水投直管</el-radio-button>
             </el-radio-group>
         </div> -->
-      <el-card class="box-card">
+      <el-card class="box-card" shadow="hover">
         <div slot="header"
              class="clearfix">
           <span class="project-panel-title"><i class="fa fa-info-circle"></i> 基础信息</span>
@@ -62,7 +62,6 @@
             <el-form-item label="所在县">
               <!-- <el-input v-model="form.county"></el-input> -->
               <el-cascader :options="options"
-                           :show-all-levels="false"
                            ref="regionSelector"
                            v-model="region"
                            @change="selectedRegion"></el-cascader>
@@ -96,7 +95,7 @@
           </el-col>
         </el-row>
       </el-card>
-      <el-card class="box-card">
+      <el-card class="box-card" shadow="hover">
         <div slot="header"
              class="clearfix">
           <span class="project-panel-title"><i class="fa fa-book"></i> 水库资料</span>
@@ -232,7 +231,7 @@
           </el-col>
         </el-row>
       </el-card>
-      <el-card class="box-card">
+      <el-card class="box-card" shadow="hover">
         <div slot="header"
              class="clearfix">
           <span class="project-panel-title"><i class="fa fa-bank"></i> 工程信息</span>
@@ -432,10 +431,10 @@
           </el-col>
         </el-row>
       </el-card>
-      <el-card class="box-card">
+      <el-card class="box-card" shadow="hover">
         <div slot="header"
              class="clearfix">
-          <span>附件</span>
+          <span class="project-panel-title"><i class="fa fa-upload "></i> 上传附件</span>
         </div>
         <el-upload class="upload-demo"
                    list-type="picture-card"
@@ -643,18 +642,21 @@ export default {
       return this.$http.get('/api/user/mybaseinfo', { loading: { target: '#addProject' } })
     },
     getAllRegion () {
-      this.$http.get('/api/region/all', { loading: { target: '#addProject' } }).then(res => {
-        let data = res.data
-        if (data && data.length > 0) {
-          data.map(item => {
-            item.label = item.regionName
-            item.value = item.regionId
-            return item
-          })
-        }
-        let treeData = this.$store.state.buildTree(data, 'regionId', 'parentId')
-        this.options = treeData
-        this.optionsOrigin = res.data
+      return new Promise((resolve, reject) => {
+        this.$http.get('/api/region/all', { loading: { target: '#addProject' } }).then(res => {
+          let data = res.data
+          if (data && data.length > 0) {
+            data.map(item => {
+              item.label = item.regionName
+              item.value = item.regionId
+              return item
+            })
+          }
+          let treeData = this.$store.state.buildTree(data, 'regionId', 'parentId')
+          this.options = treeData
+          this.optionsOrigin = res.data
+          resolve(res.data)
+        })
       })
     },
     selectedRegion (value) {
@@ -679,16 +681,20 @@ export default {
     }
   },
   created () {
-    this.getAllRegion()
+    // 默认赋值问题可能导致下拉框不能赋值，所以添加服务调用先后顺序
+    let def = this.getAllRegion()
     let isRegister = this.$store.state.isRegistered
     if (isRegister === null) {
       this.isAdd = false
-      this.getMyBaseInfo().then(res => {
+      Promise.all([def, this.getMyBaseInfo()]).then(result => {
+        let res = result[1]
         if (res.code === 1002) {
           this.form = res.data
           this.form.hasSignedConstructionContract = res.data.hasSignedConstructionContract === '是'
           this.form.hasAcceptCompletion = res.data.hasAcceptCompletion === '是'
           this.form.hasProjectCompleted = res.data.hasProjectCompleted === '是'
+          console.log('数据', res.data)
+          console.log('数据regionId', res.data.regionId)
           this.region = this.findRegionId(res.data.regionId)
           this.fileList = this.$common.pushAttachment(res.data.baseInfoFiles)
         } else {

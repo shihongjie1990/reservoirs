@@ -92,7 +92,42 @@
                 :md="12"
                 :xs="24">
           <el-form-item label="当前状态:">
-            <span>{{ form.statusChn }}</span>
+            <span>{{ form.fundApplicationPayDetail | filterStatus }}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :lg="24"
+                :md="12"
+                :xs="24">
+          <el-form-item label="明细:"
+                        v-if="adjustStatus(form.fundApplicationPayDetail)">
+            <div class="pay-detail">
+              当前批复总额：<span>{{ form.fundApplicationPayDetail.Actual_amount }}</span>（{{ form.fundApplicationPayDetail.Money_unit }}）
+            </div>
+            <el-table :data="form.fundApplicationPayDetail.Amount_details"
+                      border
+                      style="width: 100%">
+              <el-table-column prop="Amount_money"
+                               label="实际拨付"
+                               align="center">
+              </el-table-column>
+              <el-table-column prop="Center_amount_money"
+                               align="center"
+                               label="中央资金">
+              </el-table-column>
+              <el-table-column prop="Loan_amount_money"
+                               align="center"
+                               label="贷款资金">
+              </el-table-column>
+              <el-table-column prop="Finance_amount_money"
+                               align="center"
+                               label="省级财政资金">
+              </el-table-column>
+              <el-table-column prop="Amount_date"
+                               align="center"
+                               width="180"
+                               label="拨付日期">
+              </el-table-column>
+            </el-table>
           </el-form-item>
         </el-col>
         <!-- <el-col :lg="24"
@@ -114,7 +149,8 @@
                 :md="24"
                 :xs="24">
           <el-form-item label="附件:">
-            <attachment-files :files="files" v-if="files.length > 0"></attachment-files>
+            <attachment-files :files="files"
+                              v-if="files.length > 0"></attachment-files>
           </el-form-item>
         </el-col>
         <el-col :lg="24"
@@ -142,21 +178,44 @@ export default {
     applicationId: {
       type: String,
       required: true
+    },
+    fundApplicationPayDetail: {
+      type: Object,
+      required: true
     }
   },
   components: {
     attachmentFiles
   },
-  data() {
+  filters: {
+    filterStatus (data) {
+      if (data && Object.keys(data).length > 0) {
+        return '已批复'
+      } else {
+        return '待审批'
+      }
+    }
+  },
+  data () {
     return {
       form: {},
       files: []
     }
   },
-  created() {
+  methods: {
+    adjustStatus (data) {
+      if (data && Object.keys(data).length > 0) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  created () {
     this.$http.get(`/api/fund/detail/${this.applicationId}`, { loading: { target: '#info_detail' } }).then(res => {
       if (res.code === 1002) {
         this.form = res.data
+        this.form.fundApplicationPayDetail = this.fundApplicationPayDetail
         this.files = res.data.fundApplicationFiles
       }
     })
@@ -164,5 +223,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+#info_detail .pay-detail {
+  margin-bottom: 16px;
+}
+
+#info_detail .pay-detail > span {
+  font-size: 28px;
+  font-style: italic;
+  color: #ffad1b;
+  font-weight: 600;
+  margin: 0 6px;
+  vertical-align: bottom;
+}
 </style>

@@ -2807,7 +2807,27 @@ label {
 }
 
 .project-form>.el-card {
-  margin: 20px 10px;
+  /* margin: 20px 10px; */
+  border-radius: 0;
+  border: none;
+}
+
+.project-form > .el-card > .el-card__header {
+  background: #6bd4f7;
+  color: #fff;
+}
+
+.projece-baseinfo-dialog .el-dialog__header {
+  padding: 30px;
+  background: #fff;
+  font-weight: 600;
+}
+.projece-baseinfo-dialog .el-dialog__header > .el-dialog__title {
+  font-size: 26px;
+  color: #6bd4f7;
+}
+.projece-baseinfo-dialog .el-dialog__body {
+  padding: 0;
 }
 
 /* ------------------------------loading---------------------------------- */

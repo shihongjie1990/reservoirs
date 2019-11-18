@@ -4,45 +4,46 @@
   /* height: 757px; */
 }
 
-.reservoir-desc>div {
+.reservoir-desc > div {
   padding: 10px 20px;
 }
 
-.reservoir-desc>.title {
+.reservoir-desc > .title {
   font-size: 18px;
   font-weight: 600;
 }
 
-.reservoir-desc>.desc-detail {
+.reservoir-desc > .desc-detail {
   height: 473px;
   overflow: auto;
 }
 
-.reservoir-desc>.desc-detail>div {
+.reservoir-desc > .desc-detail > div {
   padding: 6px 0;
 }
 
-.desc-detail>div>label {
+.desc-detail > div > label {
   width: 70px;
   display: inline-block;
 }
 
-.desc-detail>div>span {
+.desc-detail > div > span {
   display: inline-block;
   width: calc(100% - 75px);
   vertical-align: top;
   word-break: break-word;
 }
 
-.image-manager>.el-card {
+.image-manager > .el-card {
   margin-bottom: 20px;
 }
 
-.upload-component>div {
+
+.upload-component > div {
   display: inline;
 }
 
-.upload-component>div>a {
+.upload-component > div > a {
   background-color: #fbfdff;
   border: 1px dashed #c0ccda;
   border-radius: 6px;
@@ -57,29 +58,29 @@
   position: relative;
 }
 
-.upload-component>div>a>i {
+.upload-component > div > a > i {
   font-size: 28px;
   color: #8c939d;
 }
 
-.upload-component>div>a>div {
+.upload-component > div > a > div {
   position: absolute;
   top: 0;
   width: 100%;
-  background: rgba(0, 0, 0, .6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   font-size: 18px;
   border-radius: 6px;
   display: none;
 }
 
-.upload-component>div>a:hover>div {
+.upload-component > div > a:hover > div {
   cursor: pointer;
   display: block;
 }
 
 /* -------------------水雨情------------------------ */
-.water-rain>.el-row>.el-col {
+.water-rain > .el-row > .el-col {
   margin: 20px 0;
 }
 
@@ -93,11 +94,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, .8);
+  background: rgba(0, 0, 0, 0.8);
   z-index: 99999;
 }
 
-.view-full-pic>img {
+.view-full-pic > img {
   max-width: 100%;
   max-height: 100%;
 }
@@ -113,10 +114,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, .8);
+  background: rgba(0, 0, 0, 0.8);
 }
 
-.slide-show>img {
+.slide-show > img {
   max-width: 100%;
   max-height: 100%;
   cursor: pointer;
@@ -129,7 +130,7 @@
 }
 
 /* ---------------------工程图片浏览------------------- */
-.show-pic>.el-col {
+.show-pic > .el-col {
   padding: 8px;
 }
 
@@ -139,21 +140,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, .8);
+  background: rgba(0, 0, 0, 0.8);
   position: relative;
 }
 
-.show-pic .image-div>img {
+.show-pic .image-div > img {
   max-width: 100%;
   max-height: 100%;
 }
 
-.show-pic .image-div>img:hover {
+.show-pic .image-div > img:hover {
   cursor: pointer;
 }
 
 /* -----------------------统一管理页面----------------- */
-.manager-page>.operation-area {
+.manager-page > .operation-area {
   margin: 15px 0;
 }
 
@@ -205,7 +206,6 @@
 .loading-mask {
   height: calc(100vh - 145px);
 }
-
 
 .last-unit {
   position: absolute;

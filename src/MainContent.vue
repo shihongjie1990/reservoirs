@@ -52,7 +52,8 @@
                :close-on-press-escape="false"
                :show-close="false"
                :visible="!$store.state.isRegistered"
-               width="80%">
+               width="60%"
+               class="projece-baseinfo-dialog">
       <add-project v-if="!$store.state.isRegistered"></add-project>
     </el-dialog>
   </div>
